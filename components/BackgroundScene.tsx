@@ -65,8 +65,20 @@ function BackdropParticles({ count = 200 }) {
   return (
     <points ref={points}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
-        <bufferAttribute attach="attributes-size" count={count} array={sizes} itemSize={1} />
+        <bufferAttribute 
+          attach="attributes-position" 
+          count={count} 
+          array={positions} 
+          itemSize={3} 
+          args={[positions, 3]}
+        />
+        <bufferAttribute 
+          attach="attributes-size" 
+          count={count} 
+          array={sizes} 
+          itemSize={1} 
+          args={[sizes, 1]}
+        />
       </bufferGeometry>
       <pointsMaterial size={0.05} color="#4f46e5" transparent opacity={0.4} sizeAttenuation />
     </points>
