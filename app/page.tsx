@@ -20,6 +20,7 @@ import NavBar from '@/components/NavBar'
 import ProjectCard from '@/components/ProjectCard'
 import SkillBadge from '@/components/SkillBadge'
 import ContactForm from '@/components/ContactForm'
+import BackgroundScene from '@/components/BackgroundScene'
 
 const AnimatedTitle = ({ text }: { text: string }) => {
   const characters = text.split("")
