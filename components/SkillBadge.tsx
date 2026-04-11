@@ -1,17 +1,14 @@
-"use client"
-
-import { motion } from "framer-motion"
+import { motion } from 'framer-motion'
 
 interface SkillBadgeProps {
   name: string
-  category?: string
 }
 
 export default function SkillBadge({ name }: SkillBadgeProps) {
   return (
-    <motion.span
-      whileHover={{ scale: 1.05, x: -2, y: -2 }}
-      className="px-4 py-2 brutal-border bg-white brutal-shadow text-sm font-black uppercase tracking-tight whitespace-nowrap hover:bg-primary transition-colors cursor-default"
+    <motion.span 
+      whileHover={{ scale: 1.05, borderAlpha: 0.3 }}
+      className="px-4 py-1.5 rounded-lg bg-zinc-900/50 border border-zinc-800 text-sm font-medium text-zinc-300 transition-colors hover:text-white hover:border-zinc-700"
     >
       {name}
     </motion.span>

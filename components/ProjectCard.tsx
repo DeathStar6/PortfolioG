@@ -1,49 +1,54 @@
-"use client"
-
-import { motion } from "framer-motion"
-import { ExternalLink, Github } from "lucide-react"
+import { motion } from 'framer-motion'
+import { Github, ExternalLink, Zap } from 'lucide-react'
 
 interface ProjectCardProps {
   title: string
   description: string
   techStack: string[]
   github?: string
-  demo?: string
+  link?: string
 }
 
-export default function ProjectCard({ title, description, techStack, github, demo }: ProjectCardProps) {
+export default function ProjectCard({ title, description, techStack, github, link }: ProjectCardProps) {
   return (
-    <motion.div
+    <motion.div 
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ x: -4, y: -4 }}
-      className="p-6 brutal-border brutal-shadow-lg bg-white flex flex-col h-full group hover:bg-zinc-50 transition-colors"
+      className="glass-card p-8 group relative overflow-hidden"
     >
-      <h3 className="text-2xl font-black mb-3 group-hover:underline decoration-4 underline-offset-4">{title}</h3>
-      <p className="text-black font-medium text-sm mb-6 flex-grow leading-relaxed">
-        {description}
-      </p>
-      
-      <div className="flex flex-wrap gap-2 mb-6">
-        {techStack.map((tech) => (
-          <span key={tech} className="text-[10px] font-black uppercase tracking-widest px-2 py-1 brutal-border bg-accent/20">
-            {tech}
-          </span>
-        ))}
+      <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-10 transition-opacity">
+        <Zap size={120} />
       </div>
 
-      <div className="flex gap-4">
-        {github && (
-          <a href={github} target="_blank" rel="noopener noreferrer" className="p-2 brutal-border bg-primary hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
-            <Github size={20} />
-          </a>
-        )}
-        {demo && (
-          <a href={demo} target="_blank" rel="noopener noreferrer" className="p-2 brutal-border bg-secondary hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
-            <ExternalLink size={20} />
-          </a>
-        )}
+      <div className="relative z-10">
+        <h3 className="text-2xl font-bold mb-3 text-zinc-100 group-hover:text-indigo-400 transition-colors">
+          {title}
+        </h3>
+        <p className="text-zinc-400 mb-6 leading-relaxed text-sm">
+          {description}
+        </p>
+        
+        <div className="flex flex-wrap gap-2 mb-8">
+          {techStack.map((tech) => (
+            <span key={tech} className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 bg-zinc-950 px-2 py-1 rounded">
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex gap-4">
+          {github && (
+            <a href={github} target="_blank" className="flex items-center gap-2 text-xs font-bold text-zinc-300 hover:text-white transition-colors">
+              <Github size={14} /> SOURCE
+            </a>
+          )}
+          {link && (
+            <a href={link} target="_blank" className="flex items-center gap-2 text-xs font-bold text-zinc-300 hover:text-white transition-colors">
+              <ExternalLink size={14} /> DEMO
+            </a>
+          )}
+        </div>
       </div>
     </motion.div>
   )
