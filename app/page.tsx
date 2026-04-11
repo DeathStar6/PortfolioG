@@ -176,7 +176,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      <section id="about" className="py-60 px-6 relative">
+      <section id="about" className="min-h-screen py-60 px-6 relative flex items-center">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -196,16 +196,16 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="experience" className="py-60 px-6 bg-zinc-950/50">
-        <div className="max-w-7xl mx-auto">
+      <section id="experience" className="min-h-screen py-60 px-6 bg-zinc-950/20 flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="grid lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-12">
               <h2 className="text-xs font-bold tracking-[0.5em] text-indigo-500 uppercase">Professional Timeline</h2>
               <div className="space-y-20">
                 <motion.div 
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  className="group relative pl-12 border-l border-zinc-800"
+                   initial={{ opacity: 0, x: -30 }}
+                   whileInView={{ opacity: 1, x: 0 }}
+                   className="group relative pl-12 border-l border-zinc-800"
                 >
                   <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-indigo-500 group-hover:scale-150 transition-transform" />
                   <h3 className="text-4xl font-bold text-white mb-2 tracking-tighter">Frontend Developer Intern</h3>
@@ -244,7 +244,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="projects" className="py-60 px-6">
+      <section id="projects" className="py-80 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-32 text-center space-y-4">
              <h2 className="text-xs font-bold tracking-[0.6em] text-zinc-600 uppercase">Curated Intelligence</h2>
