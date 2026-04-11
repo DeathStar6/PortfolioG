@@ -10,8 +10,8 @@ interface SkillBadgeProps {
 export default function SkillBadge({ name }: SkillBadgeProps) {
   return (
     <motion.span
-      whileHover={{ scale: 1.05, y: -2 }}
-      className="px-4 py-2 rounded-full glass border border-white/10 text-sm font-medium whitespace-nowrap"
+      whileHover={{ scale: 1.05, x: -2, y: -2 }}
+      className="px-4 py-2 brutal-border bg-white brutal-shadow text-sm font-black uppercase tracking-tight whitespace-nowrap hover:bg-primary transition-colors cursor-default"
     >
       {name}
     </motion.span>

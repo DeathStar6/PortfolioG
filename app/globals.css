@@ -3,26 +3,41 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: oklch(0.7 0.2 240);
-  --color-accent: oklch(0.8 0.15 190);
-  --color-muted: oklch(0.4 0.05 240);
+  --color-primary: #facc15;
+  --color-secondary: #f472b6;
+  --color-accent: #22d3ee;
+  --color-neon: #22c55e;
   
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-heading: 'Outfit', sans-serif;
+  
+  --shadow-brutal: 4px 4px 0px 0px rgba(0,0,0,1);
+  --shadow-brutal-lg: 8px 8px 0px 0px rgba(0,0,0,1);
+  --shadow-brutal-xl: 12px 12px 0px 0px rgba(0,0,0,1);
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes glitch {
+    0% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+    10% { clip-path: inset(10% 0 80% 0); transform: translate(2px, 2px); }
+    20% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+    30% { clip-path: inset(10% 0 80% 0); transform: translate(2px, 2px); }
+    40% { clip-path: inset(50% 0 30% 0); transform: translate(-2px, -2px); }
+    50% { clip-path: inset(30% 0 50% 0); transform: translate(2px, 2px); }
+    60% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, -2px); }
+    70% { clip-path: inset(80% 0 10% 0); transform: translate(2px, 2px); }
+    80% { clip-path: inset(50% 0 30% 0); transform: translate(-2px, -2px); }
+    90% { clip-path: inset(20% 0 70% 0); transform: translate(2px, 2px); }
+    100% { clip-path: inset(80% 0 0 0); transform: translate(-2px, -2px); }
+  }
 }
 
 :root {
-  --background: oklch(0.1 0.02 240);
-  --foreground: oklch(0.95 0.01 240);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    /* Optional: keep dark even in light mode for consistency, 
-       or define a light theme here. Let's stay dark for the 'WOW' factor requested. */
-    --background: oklch(0.1 0.02 240);
-    --foreground: oklch(0.95 0.01 240);
-  }
+  --background: #fdfcf0;
+  --foreground: #000000;
 }
 
 body {
@@ -30,34 +45,79 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+/* Neo-Brutalism Utilities */
+.brutal-border {
+  border: 4px solid #000000;
 }
 
-.glass-dark {
-  background: rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.brutal-shadow {
+  box-shadow: var(--shadow-brutal);
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, oklch(0.85 0.1 190), oklch(0.7 0.2 240));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.brutal-shadow-lg {
+  box-shadow: var(--shadow-brutal-lg);
 }
 
-::selection {
-  background: oklch(0.7 0.2 240 / 0.3);
-  color: inherit;
+.brutal-card {
+  border: 4px solid #000000;
+  box-shadow: var(--shadow-brutal);
+  background-color: white;
+  padding: 1.5rem;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.brutal-card:hover {
+  box-shadow: var(--shadow-brutal-lg);
+  transform: translate(-4px, -4px);
+}
+
+.brutal-button {
+  border: 4px solid #000000;
+  box-shadow: var(--shadow-brutal);
+  background-color: var(--color-primary);
+  padding: 0.75rem 1.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  transition: all 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brutal-button:active {
+  box-shadow: none;
+  transform: translate(4px, 4px);
+}
+
+/* Texture & Effects */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+.glitch-hover:hover {
+  animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px black;
+  color: transparent;
 }

@@ -1,0 +1,31 @@
+# Subhajit Chatterjee - AI/ML Engineer & Frontend Developer
+> High-performance engineer focused on production-ready AI and modern web architectures. Pursuing B.Tech in CSE at Brainware University.
+
+## Capabilities
+- **AI/ML**: RAG (Retrieval Augmented Generation), LLM Query Systems, NLP, Fake News Detection, Computer Vision.
+- **Frontend**: Next.js, React.js, Tailwind CSS, Framer Motion, Premium Web Design.
+- **Backend**: Node.js, Express, Python (Flask/Django), SQL/NoSQL.
+- **Performance**: Optimizing LLM response times (<1.5s), SEO optimization, responsive layouts.
+
+## Technical Stack
+- **Languages**: Python, JavaScript, C++, SQL.
+- **Frameworks**: Next.js, React, TensorFlow, PyTorch, Scikit-learn.
+- **Tools**: LangChain, Docker, AWS, Git.
+
+## Key Projects
+- **LLM-Powered Query System**: Policy doc analysis using RAG.
+- **University Landing Page**: High-performance MERN application.
+- **Grade Manager**: Custom HTTP server with JSON persistence.
+- **Fake News Detection**: ML-based misinformation classifier.
+
+## Experience
+- **Frontend Developer Intern @ Creatiq Media**: Built responsive UI, integrated REST APIs, optimized frontend performance.
+
+## Education
+- **B.Tech in CSE**, Brainware University (2024-2028), CGPA: 8.3.
+- **B.Sc (General)**, Uluberia College (2018-2021), CGPA: 7.1.
+
+## Contact
+- GitHub: https://github.com/DeathStar6
+- LinkedIn: https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/
+- Email: subhajitc939@gmail.com

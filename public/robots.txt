@@ -1,0 +1,14 @@
+# robots.txt for Subhajit Chatterjee Portfolio
+
+User-agent: *
+Allow: /
+
+# Specific rules for AI crawlers
+User-agent: GPTBot
+Allow: /llms.txt
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://portfolio-g-six.vercel.app/sitemap.xml
