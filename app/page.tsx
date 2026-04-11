@@ -103,6 +103,7 @@ export default function Home() {
   return (
     <main ref={containerRef} className="relative min-h-screen bg-black">
       <NavBar />
+      <BackgroundScene progress={smoothScroll} />
       
       <section className="relative h-[120vh] flex items-center justify-center px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto text-center space-y-12">
