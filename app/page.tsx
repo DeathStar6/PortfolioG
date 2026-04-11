@@ -119,7 +119,7 @@ export default function Home() {
           </motion.div>
 
           <div className="space-y-4">
-            <h1 className="text-7xl md:text-[9rem] font-black tracking-tighter leading-[0.85] text-white">
+            <h1 className="text-5xl md:text-8xl lg:text-[9.5rem] font-black tracking-tighter leading-[0.85] text-white">
               <AnimatedTitle text="SUBHAJIT" />
               <div className="text-gradient">
                 <AnimatedTitle text="CHATTERJEE" />

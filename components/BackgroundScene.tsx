@@ -7,30 +7,26 @@ import * as THREE from 'three'
 import { MotionValue } from 'framer-motion'
 
 function SceneController({ progress }: { progress: MotionValue<number> }) {
-  const { camera } = useThree()
+  const { camera, viewport } = useThree()
   
   useFrame(() => {
     const p = progress.get()
-    
-    // Scene Stations
-    // 0.0 - 0.2: Hero [0,0,30]
-    // 0.2 - 0.4: Philosophy [15,0,25]
-    // 0.4 - 0.6: Experience [0,20,20]
-    // 0.6 - 0.8: Projects [-15,0,35]
-    // 0.8 - 1.0: Contact [0,0,15]
+    const isMobile = viewport.width < 15
+    const mobileZOffset = isMobile ? 1.5 : 1 // Move camera back on mobile
 
-    let targetPos = new THREE.Vector3(0, 0, 30)
+    let targetPos = new THREE.Vector3(0, 0, 30 * mobileZOffset)
 
     if (p < 0.2) {
-      targetPos.set(0, 0, 35)
+      targetPos.set(0, 0, 35 * mobileZOffset)
     } else if (p < 0.4) {
-      targetPos.set(20, 5, 25)
+      // On mobile, keep more central to avoid cutting off
+      targetPos.set(isMobile ? 5 : 20, isMobile ? 5 : 5, 25 * mobileZOffset)
     } else if (p < 0.6) {
-      targetPos.set(-15, 20, 20)
+      targetPos.set(isMobile ? -5 : -15, 20, 20 * mobileZOffset)
     } else if (p < 0.8) {
-      targetPos.set(15, -10, 30)
+      targetPos.set(isMobile ? 5 : 15, isMobile ? -5 : -10, 30 * mobileZOffset)
     } else {
-      targetPos.set(0, 0, 20)
+      targetPos.set(0, 0, 20 * mobileZOffset)
     }
     
     camera.position.lerp(targetPos, 0.05)
