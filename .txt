@@ -1,0 +1,68 @@
+SUBHAJIT CHATTERJEE
+[8585032046] | [subhajitc939@gmail.com] | [https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/] | [DeathStar6]
+
+EDUCATION
+
+[Brainware University], [Barasat, West Bengal]
+Bachelor of Technology (B.Tech) in Computer Science
+[Start Date] – [End Date]
+
+EXPERIENCE
+
+Frontend Developer Intern
+Creatiq Media | Remote
+[Start Date] – [End Date]
+
+Developed responsive web interfaces using modern frontend technologies
+Improved UI/UX for better user engagement and usability
+Collaborated with team members to deliver features within deadlines
+Integrated APIs for dynamic data rendering
+SUMMARY
+
+Computer Science student with experience in frontend development and AI-based applications, focused on building intelligent and user-friendly systems.
+Familiar with full-stack development and currently exploring AI, machine learning, and system design.
+
+PROJECTS
+
+AI Document Query System – LLM-based Retrieval App
+Built a system to process natural language queries on unstructured documents
+
+Implemented query processing using LLM for structured responses
+Integrated backend API for document parsing and answer generation
+Designed system to handle vague and incomplete user queries
+
+Tech Stack: Next.js, API Integration, LLM
+GitHub: [Link]
+
+Habit Quest – Gamified Habit Tracker
+Developed a full-stack habit tracking application with gamification
+
+Built features like XP, levels, and rewards for user engagement
+Designed responsive UI with modern frontend framework
+Integrated authentication and database for persistent tracking
+
+Tech Stack: Next.js, PostgreSQL
+GitHub: [Link]
+
+Personal Website Project
+Created a responsive website showcasing projects and skills
+
+Built clean UI with focus on usability
+Structured components for scalability and maintainability
+
+Tech Stack: HTML, CSS, JavaScript
+GitHub: [Link]
+
+SKILLS
+
+Languages: C, JavaScript
+Frontend: HTML, CSS, React, Next.js
+Backend: Node.js (basic), API Handling
+Databases: PostgreSQL
+Tools: Git, GitHub, VS Code
+
+ACHIEVEMENTS
+Successfully completed frontend development internship
+Built and deployed multiple real-world projects
+Participated in hackathon involving AI-based systems
+Demonstrated leadership and teamwork in group AI/ML project

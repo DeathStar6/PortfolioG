@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: oklch(0.7 0.2 240);
+  --color-accent: oklch(0.8 0.15 190);
+  --color-muted: oklch(0.4 0.05 240);
+  
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+}
+
+:root {
+  --background: oklch(0.1 0.02 240);
+  --foreground: oklch(0.95 0.01 240);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Optional: keep dark even in light mode for consistency, 
+       or define a light theme here. Let's stay dark for the 'WOW' factor requested. */
+    --background: oklch(0.1 0.02 240);
+    --foreground: oklch(0.95 0.01 240);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, oklch(0.85 0.1 190), oklch(0.7 0.2 240));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+::selection {
+  background: oklch(0.7 0.2 240 / 0.3);
+  color: inherit;
+}
