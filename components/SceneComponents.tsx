@@ -54,19 +54,19 @@ export function Atmosphere({ scrollVelocity }: { scrollVelocity: number }) {
     <group>
       <points ref={pointsBack}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={600} array={pBack} itemSize={3} />
+          <bufferAttribute attach="attributes-position" count={600} array={pBack} itemSize={3} args={[pBack, 3]} />
         </bufferGeometry>
         <pointsMaterial size={0.12} color="#4f46e5" transparent opacity={0.3} blending={THREE.AdditiveBlending} />
       </points>
       <points ref={pointsMid}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={400} array={pMid} itemSize={3} />
+          <bufferAttribute attach="attributes-position" count={400} array={pMid} itemSize={3} args={[pMid, 3]} />
         </bufferGeometry>
         <pointsMaterial size={0.18} color="#6366f1" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
       </points>
       <points ref={pointsFront}>
         <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={200} array={pFront} itemSize={3} />
+          <bufferAttribute attach="attributes-position" count={200} array={pFront} itemSize={3} args={[pFront, 3]} />
         </bufferGeometry>
         <pointsMaterial size={0.25} color="#818cf8" transparent opacity={0.7} blending={THREE.AdditiveBlending} />
       </points>
