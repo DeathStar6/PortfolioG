@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { 
   Rocket, 
   BrainCircuit, 
@@ -10,20 +11,54 @@ import {
   Github, 
   Linkedin, 
   Mail, 
-  ExternalLink, 
   Terminal,
-  Server,
   Database,
   Cloud,
-  Cpu,
-  ArrowRight
+  Cpu
 } from 'lucide-react'
 import NavBar from '@/components/NavBar'
 import ProjectCard from '@/components/ProjectCard'
 import SkillBadge from '@/components/SkillBadge'
 import ContactForm from '@/components/ContactForm'
 
+const AnimatedTitle = ({ text }: { text: string }) => {
+  const characters = text.split("")
+  
+  return (
+    <div className="overflow-hidden flex flex-wrap justify-center">
+      {characters.map((char, i) => (
+        <motion.span
+          key={i}
+          initial={{ y: "100%", opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.8,
+            delay: i * 0.03,
+            ease: [0.215, 0.61, 0.355, 1],
+          }}
+          className="inline-block"
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </div>
+  )
+}
+
 export default function Home() {
+  const containerRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  })
+
+  const smoothScroll = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
+
   const skills = [
     { category: "Programming", items: ["C", "C++", "Python", "JavaScript", "SQL"], icon: <Terminal size={18} /> },
     { category: "AI & Machine Learning", items: ["TensorFlow", "PyTorch", "NLP", "RAG", "LLM Integration", "Prompt Engineering"], icon: <Cpu size={18} /> },
@@ -59,107 +94,187 @@ export default function Home() {
     },
     {
       title: "Fake News Detection",
-      description: "ML pipeline classifying real vs fake news using TF-IDF and Scikit-Learn models (Logistic Regression & Naive Bayes).",
+      description: "ML pipeline classifying real vs fake news using text preprocessing. Trained Logistic Regression and Naive Bayes models with improved accuracy.",
       techStack: ["Python", "Scikit", "NLP", "TF-IDF"],
       github: "https://github.com/DeathStar6",
     },
   ]
 
   return (
-    <main className="min-h-screen">
+    <main ref={containerRef} className="relative min-h-screen bg-black">
       <NavBar />
       
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center px-6 overflow-hidden">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-6xl md:text-8xl font-black text-gradient"
-            >
-              SUBHAJIT<br />CHATTERJEE
-            </motion.h1>
+      <section className="relative h-[120vh] flex items-center justify-center px-6 overflow-hidden">
+        <div className="max-w-5xl mx-auto text-center space-y-12">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex justify-center"
+          >
+            <div className="px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase">
+              Now Available for 2026/28 Partnerships
+            </div>
+          </motion.div>
+
+          <div className="space-y-4">
+            <h1 className="text-7xl md:text-[9rem] font-black tracking-tighter leading-[0.85] text-white">
+              <AnimatedTitle text="SUBHAJIT" />
+              <div className="text-gradient">
+                <AnimatedTitle text="CHATTERJEE" />
+              </div>
+            </h1>
+          </div>
           
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto font-medium"
+            transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="text-zinc-400 text-xl md:text-2xl max-w-2xl mx-auto font-medium leading-relaxed"
           >
-            Building intelligent systems with AI and scalable web technologies. 
-            Transforming complex data into seamless products.
+            Engineering <span className="text-white">Intelligent Systems</span> with AI 
+            and scalable web architectures. Designing the future of agentic products.
           </motion.p>
 
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-wrap items-center justify-center gap-4 pt-4"
+            transition={{ duration: 1, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-wrap items-center justify-center gap-6 pt-6"
           >
-            <a href="#projects" className="premium-button">
-              View Projects <Rocket size={18} />
-            </a>
-            <a href="#contact" className="premium-button-outline">
-              Contact Me
-            </a>
+            <motion.a 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              href="#projects" 
+              className="premium-button px-10 py-5 text-lg"
+            >
+              Examine Work <Rocket size={20} />
+            </motion.a>
+            <motion.a 
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
+              whileTap={{ scale: 0.95 }}
+              href="#contact" 
+              className="premium-button-outline px-10 py-5 text-lg"
+            >
+              Contact Agent
+            </motion.a>
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-zinc-500 flex flex-col items-center gap-2"
+          style={{ opacity: useTransform(smoothScroll, [0, 0.1], [1, 0]) }}
+          className="absolute bottom-12 flex flex-col items-center gap-4"
         >
-          <span className="text-[10px] uppercase tracking-widest font-bold">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-indigo-500 to-transparent" />
+          <div className="w-px h-24 bg-gradient-to-b from-indigo-500/50 to-transparent relative">
+            <motion.div 
+              animate={{ y: [0, 96, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.8)]" 
+            />
+          </div>
         </motion.div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-32 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.h2 
+      <section id="about" className="py-60 px-6 relative">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-3xl font-bold mb-8"
+            className="space-y-12"
           >
-            The Approach
-          </motion.h2>
-          <motion.p 
-             initial={{ opacity: 0 }}
-             whileInView={{ opacity: 1 }}
-             transition={{ delay: 0.2 }}
-             className="text-lg text-zinc-400 leading-relaxed font-medium"
-          >
-            Driven by a passion for AI and real-world problem solving, I specialize in building systems 
-            that combine modern product engineering with advanced LLM integration. With a strong learning 
-            mindset, I bridge the gap between complex research and production-ready applications.
-          </motion.p>
+            <h2 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none">
+              THE_INTELLIGENT_<br />
+              <span className="text-indigo-500/50 italic">APPROACH</span>
+            </h2>
+            <p className="text-2xl md:text-4xl text-zinc-400 font-medium leading-tight max-w-2xl">
+              I specialize in bridging the gap between <span className="text-white">complex AI research</span> and 
+              <span className="text-white"> production-ready systems</span>. 
+              My focus is on RAG, LLM integration, and high-performance Web Architectures.
+            </p>
+          </motion.div>
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-32 px-6 bg-zinc-900/20">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-xs font-bold tracking-[0.5em] text-zinc-500 uppercase mb-20 text-center">Technical Arsenal</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section id="experience" className="py-60 px-6 bg-zinc-950/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-24 items-center">
+            <div className="space-y-12">
+              <h2 className="text-xs font-bold tracking-[0.5em] text-indigo-500 uppercase">Professional Timeline</h2>
+              <div className="space-y-20">
+                <motion.div 
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  className="group relative pl-12 border-l border-zinc-800"
+                >
+                  <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-indigo-500 group-hover:scale-150 transition-transform" />
+                  <h3 className="text-4xl font-bold text-white mb-2 tracking-tighter">Frontend Developer Intern</h3>
+                  <p className="text-indigo-500 text-lg font-black mb-6 uppercase">Creatiq Media | 2025</p>
+                  <div className="text-zinc-400 text-lg space-y-4 max-w-lg font-medium opacity-60 group-hover:opacity-100 transition-opacity">
+                    <p>Designed and scaled responsive UI components for high-traffic media platforms.</p>
+                    <p>Integrated complex REST architectures with React.js, focusing on render performance and UX flow.</p>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-8">
+              {[
+                { label: "LeetCode", value: "100+", sub: "Problems Solved", icon: <Code2 /> },
+                { label: "B.Tech Honors", value: "8.3", sub: "Current CGPA", icon: <GraduationCap /> },
+                { label: "Response Time", value: "<1.5s", sub: "RAG Systems", icon: <Cpu /> },
+                { label: "Stack", value: "AI+WEB", sub: "Deep Synergy", icon: <BrainCircuit /> }
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="glass-card p-10 flex flex-col justify-between aspect-square"
+                >
+                  <div className="text-indigo-400">{stat.icon}</div>
+                  <div>
+                    <h4 className="text-5xl font-black text-white mb-2">{stat.value}</h4>
+                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{stat.sub}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" className="py-60 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-32 text-center space-y-4">
+             <h2 className="text-xs font-bold tracking-[0.6em] text-zinc-600 uppercase">Curated Intelligence</h2>
+             <h3 className="text-7xl md:text-9xl font-black text-white tracking-tighter">PROJECTS</h3>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12">
+            {projects.map((project, i) => (
+              <ProjectCard key={project.title} {...project} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" className="py-60 px-6 bg-zinc-950/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-3 gap-12">
             {skills.map((skillGroup, i) => (
               <motion.div 
                 key={skillGroup.category}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="glass-card p-8 group"
+                className="glass-card p-12 space-y-12 group"
               >
-                <div className="flex items-center gap-4 mb-6 text-indigo-400">
-                  {skillGroup.icon}
-                  <h3 className="text-lg font-bold text-zinc-100">{skillGroup.category}</h3>
+                <div className="flex items-center justify-between">
+                  <div className="text-indigo-400">{skillGroup.icon}</div>
+                  <span className="text-[10px] font-black text-zinc-700 uppercase tracking-widest">0{i+1}</span>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="text-3xl font-bold text-white tracking-tighter">{skillGroup.category.toUpperCase()}</h3>
+                <div className="flex flex-wrap gap-3">
                   {skillGroup.items.map((item) => (
                     <SkillBadge key={item} name={item} />
                   ))}
@@ -170,105 +285,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-32 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
-            <div className="space-y-4">
-              <h2 className="text-indigo-400 font-bold tracking-widest uppercase text-xs">Featured Work</h2>
-              <h3 className="text-5xl font-black">PROVED_OUTPUTS</h3>
-            </div>
-            <p className="text-zinc-500 font-medium max-w-sm">Every project is an iteration towards engineering excellence and intelligent automation.</p>
+      <section id="contact" className="py-60 px-6 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center space-y-24">
+          <div className="space-y-6">
+            <h2 className="text-[15vw] font-black text-white/5 absolute -top-20 left-0 tracking-tighter pointer-events-none uppercase">CONNECT</h2>
+            <h3 className="text-6xl md:text-8xl font-black text-white tracking-tighter underline decoration-indigo-500/50 decoration-8 underline-offset-8">INITIATE_CONTACT</h3>
+            <p className="text-xl text-zinc-400 font-medium max-w-lg mx-auto">Available for ambitious AI engineering roles and high-scale technical systems architectures.</p>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project) => (
-              <ProjectCard key={project.title} {...project} />
+          
+          <ContactForm />
+          
+          <div className="flex flex-wrap justify-center gap-16 pt-12">
+            {[
+              { label: "GITHUB", icon: <Github />, href: "https://github.com/DeathStar6" },
+              { label: "LINKEDIN", icon: <Linkedin />, href: "https://linkedin.com/in/subhajit-chatterjee" },
+              { label: "EMAIL", icon: <Mail />, href: "mailto:subhajitc939@gmail.com" }
+            ].map((link) => (
+              <a 
+                key={link.label} 
+                href={link.href}
+                className="group flex flex-col items-center gap-6"
+              >
+                <div className="w-16 h-16 rounded-full border border-zinc-800 flex items-center justify-center group-hover:border-indigo-500 group-hover:bg-indigo-500/10 transition-all group-hover:-translate-y-2">
+                  <span className="text-zinc-400 group-hover:text-indigo-400">{link.icon}</span>
+                </div>
+                <span className="text-[10px] font-black tracking-[0.4em] text-zinc-600 group-hover:text-white transition-colors uppercase">{link.label}</span>
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Experience & Achievements */}
-      <section id="experience" className="py-32 px-6 bg-zinc-900/30">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-20">
-          
-          {/* Experience */}
-          <div className="space-y-12">
-            <h3 className="text-2xl font-bold flex items-center gap-4"><Award className="text-indigo-400" /> Career Path</h3>
-            <div className="relative border-l border-zinc-800 pl-8 space-y-12">
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                className="relative"
-              >
-                <div className="absolute -left-[37px] top-1 w-4 h-4 rounded-full bg-indigo-500/20 border-2 border-indigo-500" />
-                <h4 className="text-xl font-bold text-white">Frontend Developer Intern</h4>
-                <p className="text-indigo-400 text-sm font-bold mb-4 uppercase tracking-wider">Creatiq Media | 2025</p>
-                <ul className="space-y-3 text-zinc-400 text-sm leading-relaxed">
-                  <li>Built responsive UI screens and reusable components using React.js and modern CSS.</li>
-                  <li>Integrated REST APIs and optimized performance across primary user flows.</li>
-                  <li>Collaborated via Git/GitHub in a hybrid professional environment.</li>
-                </ul>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Achievements */}
-          <div className="space-y-12">
-            <h3 className="text-2xl font-bold flex items-center gap-4"><GraduationCap className="text-indigo-400" /> Milestones</h3>
-            <div className="grid gap-6">
-              <div className="glass-card p-6 flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm font-bold text-zinc-400 mb-1 uppercase tracking-widest">LeetCode Mastery</h4>
-                  <p className="text-2xl font-black">100+ PROBLEMS SOLVED</p>
-                </div>
-                <div className="w-12 h-12 bg-indigo-500/10 flex items-center justify-center rounded-lg text-indigo-400">
-                  <Code2 size={24} />
-                </div>
-              </div>
-
-              <div className="glass-card p-6 flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm font-bold text-zinc-400 mb-1 uppercase tracking-widest">B.Tech Honors</h4>
-                  <p className="text-2xl font-black">8.3 CGPA</p>
-                  <p className="text-[10px] text-zinc-500">BRAINWARE UNIVERSITY</p>
-                </div>
-                <div className="w-12 h-12 bg-emerald-500/10 flex items-center justify-center rounded-lg text-emerald-400">
-                  <GraduationCap size={24} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-32 px-6">
-        <div className="max-w-4xl mx-auto text-center space-y-12">
-          <div className="space-y-4">
-            <h2 className="text-indigo-400 font-bold tracking-widest uppercase text-xs">Let's Connect</h2>
-            <h3 className="text-5xl font-black">START_BUILDING</h3>
-          </div>
-          <ContactForm />
-
-          <div className="flex justify-center gap-8 pt-12">
-            <a href="https://github.com/DeathStar6" target="_blank" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-all hover:-translate-y-1">
-              <Github size={20} /> <span className="text-xs font-bold uppercase tracking-wider">GitHub</span>
-            </a>
-            <a href="https://linkedin.com/in/subhajit-chatterjee" target="_blank" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-all hover:-translate-y-1">
-              <Linkedin size={20} /> <span className="text-xs font-bold uppercase tracking-wider">LinkedIn</span>
-            </a>
-            <a href="mailto:subhajitc939@gmail.com" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-all hover:-translate-y-1">
-              <Mail size={20} /> <span className="text-xs font-bold uppercase tracking-wider">Email</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <footer className="py-12 px-6 border-t border-zinc-900 text-center">
-        <p className="text-zinc-600 text-[10px] uppercase font-bold tracking-widest">
-          Intelligent systems. Meticulous design. SC © {new Date().getFullYear()}
+      <footer className="py-20 px-6 border-t border-zinc-900 text-center space-y-4">
+        <p className="text-zinc-600 text-[10px] uppercase font-bold tracking-[0.8em]">
+          METICULOUSLY CRAFTED @ 2026. SC_ENGINEERING_DOCS
         </p>
       </footer>
     </main>
