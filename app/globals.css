@@ -3,11 +3,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent: #6366f1;
-  --color-surface: #0a0a0a;
+  --color-accent: #ffffff;
+  --color-surface: oklch(9% 0.005 265);
   
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-heading: 'Outfit', sans-serif;
+  /* Geist Sans (Vercel) + Azeret Mono for terminal accents */
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-heading: 'Geist', sans-serif;
+  --font-mono: 'Azeret Mono', monospace;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
@@ -16,11 +18,12 @@
 }
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
-  --accent: #ffffff; /* Sharp White for Monochrome */
-  --glow-primary: rgba(255, 255, 255, 0.4);
-  --shimmer-grad: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  /* Tinted near-black — removes harsh void, still reads as dark */
+  --background: oklch(8% 0.005 265);
+  --foreground: oklch(96% 0.002 265);
+  --accent: oklch(96% 0.002 265);
+  --glow-primary: rgba(255, 255, 255, 0.3);
+  --shimmer-grad: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
 }
 
 @keyframes holographic {
@@ -33,6 +36,7 @@
   50% { border-color: rgba(255, 255, 255, 0.5); }
   100% { border-color: rgba(255, 255, 255, 0.1); }
 }
+
 
 html,
 body {
@@ -170,8 +174,13 @@ h1, h2, h3, h4 {
   animation: float 6s ease-in-out infinite;
 }
 
-.text-gradient {
-  background: linear-gradient(to bottom right, #ffffff, #a1a1aa);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Outlined / stroked text — replaces banned gradient-text */
+.text-outline {
+  -webkit-text-stroke: 2px oklch(96% 0.002 265);
+  color: transparent;
+}
+
+/* Mono font utility for terminal-style UI elements */
+.font-terminal {
+  font-family: var(--font-mono), monospace;
 }

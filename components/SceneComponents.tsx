@@ -53,9 +53,18 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
   const lastScroll = useRef(0)
   const currentRotation = useRef(0)
 
-  // 1. Dual-State Data
+  // 1. Triple-State Data: Circle -> Sphere -> Scattered
   const circlePositions = useMemo(() => generateCirclePoints(3000, 10), [])
   const spherePositions = useMemo(() => generateSpherePoints(3000, 15), [])
+  const scatteredPositions = useMemo(() => {
+    const positions = new Float32Array(3000 * 3)
+    for (let i = 0; i < 3000; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 80
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 80
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 80
+    }
+    return positions
+  }, [])
   const currentPositions = useMemo(() => new Float32Array(circlePositions), [circlePositions])
 
   // 2. Connectivity (Edges)
@@ -74,13 +83,27 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
     const velocity = delta > 0 ? Math.abs(ds / delta) : 0
     lastScroll.current = s
 
-    // Morph Factor: 0 -> 1 over the first 25% of scroll (Faster morph)
-    const morphCurve = THREE.MathUtils.smoothstep(Math.min(s / 0.25, 1), 0, 1)
+    // Enhanced Morph Factor: Circle -> Sphere -> Scattered
+    const circleToSphere = THREE.MathUtils.smoothstep(Math.min(s / 0.15, 1), 0, 1)
+    const sphereToScatter = THREE.MathUtils.smoothstep(Math.max((s - 0.15) / 0.2, 0), 0, 1)
+    
+    // Calculate final positions based on scroll
+    let targetPositions: Float32Array
+    if (sphereToScatter > 0.5) {
+      // Scattered state
+      targetPositions = scatteredPositions
+    } else if (circleToSphere > 0.5) {
+      // Sphere state
+      targetPositions = spherePositions
+    } else {
+      // Circle state
+      targetPositions = circlePositions
+    }
 
     const velBase = 0.5 + Math.min(velocity * 3, 4)
     currentRotation.current += delta * velBase * 0.12
     
-    const rotSpeed = 1 + morphCurve * 2.5
+    const rotSpeed = 1 + sphereToScatter * 3
     pointsRef.current.rotation.y = currentRotation.current * rotSpeed
     pointsRef.current.rotation.x = currentRotation.current * 0.3 * rotSpeed
     linesRef.current.rotation.y = currentRotation.current * rotSpeed
@@ -96,10 +119,10 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
     for (let i = 0; i < 3000; i++) {
         const i3 = i * 3
         
-        // 1. Morph interpolation
-        const tx = circlePositions[i3] + (spherePositions[i3] - circlePositions[i3]) * morphCurve
-        const ty = circlePositions[i3+1] + (spherePositions[i3+1] - circlePositions[i3+1]) * morphCurve
-        const tz = circlePositions[i3+2] + (spherePositions[i3+2] - circlePositions[i3+2]) * morphCurve
+        // 1. Direct target positioning (no morphing for dramatic effect)
+        const tx = targetPositions[i3]
+        const ty = targetPositions[i3+1]
+        const tz = targetPositions[i3+2]
 
         // 2. Rotation transform
         _v2.set(tx, ty, tz).applyQuaternion(pointsRef.current.quaternion)
@@ -107,7 +130,7 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
         // 3. Magnetic pull calculation (Zero allocation)
         const dist = _v2.distanceTo(_v1)
         const force = Math.max(0, 20 - dist) / 20
-        const magneticStrength = (0.2 + morphCurve * 0.35) * force
+        const magneticStrength = (0.2 + sphereToScatter * 0.35) * force
         
         // Apply pull back to local space
         _v3.subVectors(_v1, _v2).multiplyScalar(magneticStrength)
@@ -126,7 +149,7 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
     linesRef.current.geometry.attributes.position.needsUpdate = true
     
     if (linesRef.current.material instanceof THREE.Material) {
-      linesRef.current.material.opacity = morphCurve * 0.12
+      linesRef.current.material.opacity = sphereToScatter * 0.12
     }
 
     const pulse = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.04

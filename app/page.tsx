@@ -5,23 +5,21 @@ import { animate, stagger } from 'animejs'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { 
   Rocket, 
-  BrainCircuit, 
   Code2, 
-  GraduationCap, 
   Github, 
   Linkedin, 
   Mail, 
   Terminal,
   Database,
   Cloud,
-  Cpu,
-  ExternalLink
+  Cpu
 } from 'lucide-react'
-import NavBar from '@/components/NavBar'
-import ProjectCard from '@/components/ProjectCard'
-import SkillBadge from '@/components/SkillBadge'
 import ContactForm from '@/components/ContactForm'
 import BackgroundScene from '@/components/BackgroundScene'
+import ProjectsStrip from '@/components/ProjectsStrip'
+import NavBar from '@/components/NavBar'
+import SkillBadge from '@/components/SkillBadge'
+import Achievements from '@/components/Achievements'
 
 const AnimatedTitle = ({ text }: { text: string }) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -73,42 +71,10 @@ export default function Home() {
     { category: "Tools & Cloud", items: ["AWS (EC2/S3/Lambda)", "Docker", "Git/GitHub", "LangChain", "Hugging Face"], icon: <Cloud size={18} /> },
   ]
 
-  const projects = [
-    {
-      title: "CivicSync AI",
-      description: "Intelligence-driven civic management system using LLMs (Gemini 1.5 Flash) for automated triage. Classified issues and detected emergencies with 60% faster triage speed.",
-      techStack: ["Node.js", "Express", "MongoDB", "Gemini AI", "Leaflet.js"],
-      github: "https://github.com/DeathStar6",
-    },
-    {
-      title: "LLM Policy Query System",
-      description: "RAG-based system for extracting structured answers from policy/legal documents. Features semantic search and <1.5s response time.",
-      techStack: ["Next.js", "Python", "LangChain", "Hugging Face", "RAG"],
-      github: "https://github.com/DeathStar6",
-    },
-    {
-      title: "University MERN Platform",
-      description: "Full-stack interactive landing page for student data flow. Optimized for performance with reusable components and secure authentication.",
-      techStack: ["React", "Node.js", "Express", "MongoDB"],
-      github: "https://github.com/DeathStar6",
-    },
-    {
-      title: "Grade Manager System",
-      description: "CLI + Web system for academic management with GPA analytics, CSV support, and automated backups using a custom Python server.",
-      techStack: ["Python", "JSON", "Bootstrap", "Custom Server"],
-      github: "https://github.com/DeathStar6",
-    },
-    {
-      title: "Fake News Detection",
-      description: "ML pipeline classifying real vs fake news using text preprocessing. Trained Logistic Regression and Naive Bayes models with improved accuracy.",
-      techStack: ["Python", "Scikit", "NLP", "TF-IDF"],
-      github: "https://github.com/DeathStar6",
-    },
-  ]
-
   return (
     <main className="relative min-h-screen overflow-x-hidden">
       <NavBar />
+      
       <BackgroundScene scroll={smoothScroll} />
       
       <motion.div 
@@ -124,15 +90,15 @@ export default function Home() {
             animate={{ opacity: 1 }}
             className="flex justify-center"
           >
-            <div className="px-4 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase">
-              Now Available for 2026/28 Partnerships
+            <div className="px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-zinc-400 text-[10px] font-bold tracking-[0.3em] uppercase font-terminal">
+              Open to Opportunities · 2026
             </div>
           </motion.div>
 
           <div className="space-y-4">
             <h1 className="text-5xl md:text-8xl lg:text-[9.5rem] font-black tracking-tighter leading-[0.85] text-white">
               <AnimatedTitle text="SUBHAJIT" />
-              <div className="text-gradient">
+              <div className="text-outline">
                 <AnimatedTitle text="CHATTERJEE" />
               </div>
             </h1>
@@ -237,24 +203,24 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-8">
               {[
-                { label: "LeetCode", value: "100+", sub: "Problems Solved", icon: <Code2 /> },
-                { label: "B.Tech Honors", value: "8.3", sub: "Current CGPA", icon: <GraduationCap /> },
-                { label: "Response Time", value: "<1.5s", sub: "RAG Systems", icon: <Cpu /> },
-                { label: "Stack", value: "AI+WEB", sub: "Deep Synergy", icon: <BrainCircuit /> }
-              ].map((stat, i) => (
+                { year: "2025", role: "Frontend Developer Intern", co: "Creatiq Media", detail: "Scaled responsive UI components for high-traffic media platforms; 40% reduction in re-render cycles via memoization." },
+                { year: "2024", role: "CivicSync AI", co: "Side Project", detail: "Built LLM-powered civic triage system (Gemini 1.5 Flash) — 60% faster issue routing, 1500+ test cases." },
+                { year: "2023", role: "LLM Policy Query System", co: "Research", detail: "RAG pipeline on legal documents with semantic search; sub-1.5s response at 95th percentile." },
+              ].map((item, i) => (
                 <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="glass-card p-10 flex flex-col justify-between aspect-square"
+                  key={item.year}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.12, ease: [0.16, 1, 0.3, 1], duration: 0.8 }}
+                  className="flex gap-8 group"
                 >
-                  <div className="text-indigo-400">{stat.icon}</div>
-                  <div>
-                    <h4 className="text-5xl font-black text-white mb-2">{stat.value}</h4>
-                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{stat.sub}</p>
+                  <span className="font-terminal text-xs text-zinc-600 pt-1 w-10 shrink-0">{item.year}</span>
+                  <div className="border-t border-white/5 pt-4 flex-1 group-hover:border-white/15 transition-colors">
+                    <p className="text-xs font-black uppercase tracking-[0.25em] text-zinc-500 mb-1">{item.co}</p>
+                    <h4 className="text-xl font-black text-white tracking-tight mb-3">{item.role}</h4>
+                    <p className="text-sm text-zinc-500 leading-relaxed font-medium">{item.detail}</p>
                   </div>
                 </motion.div>
               ))}
@@ -263,28 +229,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative h-[230vh]" id="projects">
-        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-          <div className="px-6 mb-12">
-            <motion.div 
-              style={{ y: useTransform(smoothScroll, [0.38, 0.45], [50, -50]) }}
-              className="max-w-7xl mx-auto space-y-4"
-            >
-               <h2 className="text-xs font-bold tracking-[0.6em] text-zinc-600 uppercase">Curated Intelligence</h2>
-               <h3 className="text-7xl md:text-9xl font-black text-white tracking-tighter">PROJECTS</h3>
-            </motion.div>
-          </div>
-
-          <motion.div 
-            style={{ x: useTransform(smoothScroll, [0.4, 0.58], ["0%", "-70%"]) }}
-            className="cinema-strip px-6"
-          >
-            {projects.map((project, i) => (
-              <ProjectCard key={project.title} {...project} index={i} scrollY={smoothScroll} />
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      <ProjectsStrip />
 
       <section id="skills" className="py-32 px-6 relative z-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
@@ -331,6 +276,8 @@ export default function Home() {
         </div>
       </section>
 
+      <Achievements />
+      
       <section id="contact" className="py-60 px-6 relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center space-y-24">
           <div className="space-y-6">
@@ -342,40 +289,37 @@ export default function Home() {
             </motion.h2>
             <motion.h3 
               style={{ scale: useTransform(smoothScroll, [0.85, 0.95], [0.8, 1]) }}
-              className="text-6xl md:text-8xl font-black text-white tracking-tighter underline decoration-indigo-500/50 decoration-8 underline-offset-8"
+              className="text-6xl md:text-8xl font-black text-white tracking-tighter"
             >
-              INITIATE_CONTACT
+              LET&apos;S WORK
             </motion.h3>
-            <p className="text-xl text-zinc-400 font-medium max-w-lg mx-auto">Available for ambitious AI engineering roles and high-scale technical systems architectures.</p>
+            <p className="text-xl text-zinc-400 font-medium max-w-lg mx-auto">Open to ambitious AI engineering roles and high-scale technical systems architectures.</p>
           </div>
           
           <ContactForm />
-          
-          <div className="flex flex-wrap justify-center gap-16 pt-12">
-            {[
-              { label: "GITHUB", icon: <Github />, href: "https://github.com/DeathStar6" },
-              { label: "LINKEDIN", icon: <Linkedin />, href: "https://linkedin.com/in/subhajit-chatterjee" },
-              { label: "EMAIL", icon: <Mail />, href: "mailto:subhajitc939@gmail.com" }
-            ].map((link) => (
-              <a 
-                key={link.label} 
-                href={link.href}
-                className="group flex flex-col items-center gap-6"
-              >
-                <div className="w-16 h-16 rounded-full border border-zinc-800 flex items-center justify-center group-hover:border-indigo-500 group-hover:bg-indigo-500/10 transition-all group-hover:-translate-y-2">
-                  <span className="text-zinc-400 group-hover:text-indigo-400">{link.icon}</span>
-                </div>
-                <span className="text-[10px] font-black tracking-[0.4em] text-zinc-600 group-hover:text-white transition-colors uppercase">{link.label}</span>
-              </a>
-            ))}
-          </div>
         </div>
       </section>
 
-      <footer className="py-20 px-6 border-t border-zinc-900 text-center space-y-4">
-        <p className="text-zinc-600 text-[10px] uppercase font-bold tracking-[0.8em]">
-          METICULOUSLY CRAFTED @ 2026. SC_ENGINEERING_DOCS
+      <footer className="py-20 px-6 border-t border-white/5 text-center space-y-6">
+        <p className="text-zinc-600 text-[10px] uppercase font-bold tracking-[0.8em] font-terminal">
+          © 2026 Subhajit Chatterjee — All rights reserved
         </p>
+        <div className="flex justify-center gap-8">
+          {[
+            { label: "GitHub", icon: <Github size={16} />, href: "https://github.com/DeathStar6" },
+            { label: "LinkedIn", icon: <Linkedin size={16} />, href: "https://linkedin.com/in/subhajit-chatterjee" },
+            { label: "Email", icon: <Mail size={16} />, href: "mailto:subhajitc939@gmail.com" }
+          ].map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              aria-label={link.label}
+              className="text-zinc-600 hover:text-white transition-colors"
+            >
+              {link.icon}
+            </a>
+          ))}
+        </div>
       </footer>
     </main>
   )

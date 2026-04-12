@@ -6,7 +6,7 @@ import { Github, Linkedin, Mail } from 'lucide-react'
 import { animate } from 'animejs'
 
 export default function NavBar() {
-  const navItems = ["Home", "Projects", "Skills", "Contact"]
+  const navItems = ["Home", "About", "Projects", "Skills", "Achievements", "Contact"]
   const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function NavBar() {
         translateX: 0,
         translateY: 0,
         duration: 600,
-        easing: 'easeOutElastic(1, .8)'
+        easing: 'easeOutExpo'
       })
     }
 

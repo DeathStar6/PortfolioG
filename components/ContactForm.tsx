@@ -2,20 +2,42 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send } from 'lucide-react'
+import { Send, CheckCircle, AlertCircle } from 'lucide-react'
+
+type Status = 'idle' | 'sending' | 'sent' | 'error'
 
 export default function ContactForm() {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle')
+  const [status, setStatus] = useState<Status>('idle')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setStatus('sending')
-    // Simulate sending
-    setTimeout(() => setStatus('sent'), 1500)
+
+    const form = e.currentTarget
+    const data = new FormData(form)
+
+    try {
+      // Formspree endpoint — replace YOUR_FORM_ID with your actual Formspree form ID
+      // Get a free endpoint at https://formspree.io (takes 60 seconds)
+      const res = await fetch('https://formspree.io/f/mnnqvjqd', {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      })
+
+      if (res.ok) {
+        setStatus('sent')
+        form.reset()
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
-    <motion.form 
+    <motion.form
       onSubmit={handleSubmit}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -24,42 +46,97 @@ export default function ContactForm() {
     >
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">01_NAME</label>
-          <input 
+          <label
+            htmlFor="contact-name"
+            className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500"
+          >
+            Name →
+          </label>
+          <input
+            id="contact-name"
+            name="name"
             required
-            type="text" 
-            className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800"
-            placeholder="SYSTEM_ID_NAME"
+            type="text"
+            autoComplete="name"
+            className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all font-terminal placeholder:text-zinc-700"
+            placeholder="Your name"
           />
         </div>
         <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">02_EMAIL</label>
-          <input 
+          <label
+            htmlFor="contact-email"
+            className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500"
+          >
+            Email →
+          </label>
+          <input
+            id="contact-email"
+            name="email"
             required
-            type="email" 
-            className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all font-mono placeholder:text-zinc-800"
-            placeholder="COMM_CHANNEL_ADDR"
+            type="email"
+            autoComplete="email"
+            className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all font-terminal placeholder:text-zinc-700"
+            placeholder="your@email.com"
           />
         </div>
       </div>
+
       <div className="space-y-3">
-        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">03_MESSAGE_PAYLOAD</label>
-        <textarea 
+        <label
+          htmlFor="contact-message"
+          className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500"
+        >
+          Message →
+        </label>
+        <textarea
+          id="contact-message"
+          name="message"
           required
           rows={4}
-          className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all resize-none font-mono placeholder:text-zinc-800"
-          placeholder="ENTER_DATA_HERE..."
+          className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all resize-none font-terminal placeholder:text-zinc-700"
+          placeholder="Tell me about the project or role..."
         />
       </div>
-      <button 
-        disabled={status !== 'idle'}
-        className="relative w-full py-4 bg-white text-black font-black uppercase tracking-[0.4em] text-xs hover:bg-zinc-200 transition-all disabled:opacity-50 overflow-hidden"
+
+      {/* Status feedback */}
+      {status === 'error' && (
+        <motion.p
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 text-xs text-red-400 font-mono"
+        >
+          <AlertCircle size={14} />
+          Something went wrong. Try emailing subhajitc939@gmail.com directly.
+        </motion.p>
+      )}
+
+      <button
+        type="submit"
+        disabled={status === 'sending' || status === 'sent'}
+        className="relative w-full py-4 text-black font-black uppercase tracking-[0.3em] text-xs transition-all disabled:opacity-60 overflow-hidden flex items-center justify-center gap-3"
+        style={{ background: 'var(--foreground)' }}
       >
-        <span className="relative z-10">
-          {status === 'sent' ? 'DATA_TRANSMITTED' : status === 'sending' ? 'TRANSMITTING...' : 'INITIALIZE_CONTACT'}
-        </span>
-        {/* Rapid hover shimmer */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+        {status === 'sent' ? (
+          <>
+            <CheckCircle size={16} />
+            Message Sent
+          </>
+        ) : status === 'sending' ? (
+          <>
+            <motion.span
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            >
+              Sending
+            </motion.span>
+            <span className="font-terminal">...</span>
+          </>
+        ) : (
+          <>
+            Send Message
+            <Send size={14} />
+          </>
+        )}
       </button>
     </motion.form>
   )
