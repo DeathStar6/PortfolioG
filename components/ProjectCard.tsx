@@ -74,40 +74,49 @@ export default function ProjectCard({ title, description, techStack, github, lin
           transformStyle: "preserve-3d",
           boxShadow: useTransform(shadowColor, (v) => `0 25px 50px -12px ${v}`)
         }}
-        className="glass-card p-10 group relative w-[450px] overflow-hidden cursor-pointer"
+        className="glass-card p-10 group relative w-[450px] overflow-hidden cursor-pointer border border-white/5"
       >
+        {/* Holographic Shimmer Layer */}
+        <motion.div 
+          style={{ 
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent)",
+            x: useTransform(focalProgress, [0, 1], ["-100%", "200%"])
+          }}
+          className="absolute inset-0 pointer-events-none skew-x-12"
+        />
+
         <div 
-          style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }}
+          style={{ transform: "translateZ(80px)", transformStyle: "preserve-3d" }}
           className="relative z-10"
         >
-          <div className="absolute -top-10 -right-10 p-6 opacity-[0.03] group-hover:opacity-10 transition-opacity">
-            <Zap size={150} />
+          <div className="absolute -top-10 -right-10 p-6 opacity-[0.02] group-hover:opacity-5 transition-opacity">
+            <Zap size={200} />
           </div>
 
-          <h3 className="text-2xl font-bold mb-3 text-zinc-100 group-hover:text-indigo-400 transition-colors">
-            {title}
+          <h3 className="text-3xl font-black mb-4 text-zinc-100 group-hover:text-white transition-colors tracking-tighter">
+            {title.toUpperCase()}
           </h3>
-          <p className="text-zinc-400 mb-6 leading-relaxed text-sm">
+          <p className="text-zinc-500 mb-8 leading-relaxed text-sm font-medium">
             {description}
           </p>
           
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex flex-wrap gap-2 mb-10">
             {techStack.map((tech) => (
-              <span key={tech} className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 bg-zinc-950 px-2 py-1 rounded">
+              <span key={tech} className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-600 bg-white/5 border border-white/5 px-2.5 py-1 rounded">
                 {tech}
               </span>
             ))}
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-6">
             {github && (
-              <a href={github} target="_blank" className="flex items-center gap-2 text-xs font-bold text-zinc-300 hover:text-white transition-colors">
-                <Github size={14} /> SOURCE
+              <a href={github} target="_blank" className="flex items-center gap-2 text-[10px] font-black text-zinc-500 hover:text-white transition-colors tracking-widest">
+                <Github size={14} /> SOURCE //
               </a>
             )}
             {link && (
-              <a href={link} target="_blank" className="flex items-center gap-2 text-xs font-bold text-zinc-300 hover:text-white transition-colors">
-                <ExternalLink size={14} /> DEMO
+              <a href={link} target="_blank" className="flex items-center gap-2 text-[10px] font-black text-zinc-500 hover:text-white transition-colors tracking-widest">
+                <ExternalLink size={14} /> EXPLORE //
               </a>
             )}
           </div>

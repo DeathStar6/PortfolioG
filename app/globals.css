@@ -18,6 +18,20 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
+  --accent: #ffffff; /* Sharp White for Monochrome */
+  --glow-primary: rgba(255, 255, 255, 0.4);
+  --shimmer-grad: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+@keyframes holographic {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes border-glow {
+  0% { border-color: rgba(255, 255, 255, 0.1); }
+  50% { border-color: rgba(255, 255, 255, 0.5); }
+  100% { border-color: rgba(255, 255, 255, 0.1); }
 }
 
 html,

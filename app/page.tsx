@@ -1,6 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
+import anime from 'animejs'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { 
   Rocket, 
@@ -23,25 +24,31 @@ import ContactForm from '@/components/ContactForm'
 import BackgroundScene from '@/components/BackgroundScene'
 
 const AnimatedTitle = ({ text }: { text: string }) => {
-  const characters = text.split("")
+  const containerRef = useRef<HTMLDivElement>(null)
   
+  useEffect(() => {
+    if (containerRef.current) {
+      const chars = containerRef.current.querySelectorAll('.char')
+      anime({
+        targets: chars,
+        translateY: [100, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(25, { start: 300 }),
+        easing: 'cubicBezier(.215, .61, .355, 1)',
+        duration: 1000
+      })
+    }
+  }, [])
+
   return (
-    <div className="overflow-hidden flex flex-wrap justify-center">
-      {characters.map((char, i) => (
-        <motion.span
+    <div ref={containerRef} className="overflow-hidden flex flex-wrap justify-center font-black">
+      {text.split("").map((char, i) => (
+        <span
           key={i}
-          initial={{ y: "100%", opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.8,
-            delay: i * 0.03,
-            ease: [0.215, 0.61, 0.355, 1],
-          }}
-          className="inline-block"
+          className="char inline-block"
         >
           {char === " " ? "\u00A0" : char}
-        </motion.span>
+        </span>
       ))}
     </div>
   )

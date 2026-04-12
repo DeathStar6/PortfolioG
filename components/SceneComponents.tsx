@@ -27,10 +27,12 @@ const generateSpherePoints = (n: number, radius: number) => {
 
 export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
   const pointsRef = useRef<THREE.Points>(null!)
+  const { mouse, viewport } = useThree()
   const lastScroll = useRef(0)
   const currentRotation = useRef(0)
 
-  const points = useMemo(() => generateSpherePoints(3000, 15), [])
+  const originalPositions = useMemo(() => generateSpherePoints(3000, 15), [])
+  const currentPositions = useMemo(() => new Float32Array(originalPositions), [originalPositions])
 
   useFrame((state, delta) => {
     const currentScroll = scroll.get()
@@ -38,14 +40,44 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
     const velocity = delta > 0 ? Math.abs(ds / delta) : 0
     lastScroll.current = currentScroll
 
-    // Reaction: Pulse and Rotate
-    const pulse = 1 + Math.sin(state.clock.elapsedTime) * 0.05
+    // 1. Kinetic Energy
     const velBase = 0.5 + Math.min(velocity * 2, 2)
-    
     currentRotation.current += delta * velBase * 0.2
     
     pointsRef.current.rotation.y = currentRotation.current
-    pointsRef.current.rotation.x = currentRotation.current * 0.5
+    pointsRef.current.rotation.x = currentRotation.current * 0.3
+
+    // 2. Magnetic Interaction (Mouse Projection)
+    const mx = (mouse.x * viewport.width) / 2
+    const my = (mouse.y * viewport.height) / 2
+    const mouseV = new THREE.Vector3(mx, my, 0)
+
+    const positions = pointsRef.current.geometry.attributes.position.array as Float32Array
+    
+    for (let i = 0; i < 3000; i++) {
+        const i3 = i * 3
+        const x = originalPositions[i3]
+        const y = originalPositions[i3 + 1]
+        const z = originalPositions[i3 + 2]
+        
+        // Transform original to world-relative (simple version)
+        const p = new THREE.Vector3(x, y, z)
+        p.applyQuaternion(pointsRef.current.quaternion)
+        
+        const dist = p.distanceTo(mouseV)
+        const force = Math.max(0, 15 - dist) / 15
+        
+        // Apply magnetic pull toward mouse
+        const pull = mouseV.clone().sub(p).multiplyScalar(force * 0.1)
+        
+        positions[i3] = x + pull.x
+        positions[i3 + 1] = y + pull.y
+        positions[i3 + 2] = z + pull.z
+    }
+    
+    pointsRef.current.geometry.attributes.position.needsUpdate = true
+    
+    const pulse = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.02
     pointsRef.current.scale.setScalar(pulse)
   })
 
@@ -55,16 +87,16 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
         <bufferAttribute 
           attach="attributes-position" 
           count={3000} 
-          array={points} 
+          array={currentPositions} 
           itemSize={3} 
-          args={[points, 3]}
+          args={[currentPositions, 3]}
         />
       </bufferGeometry>
       <pointsMaterial 
-        size={0.15} 
+        size={0.12} 
         color="#ffffff" 
         transparent 
-        opacity={0.4} 
+        opacity={0.5} 
         sizeAttenuation 
         blending={THREE.AdditiveBlending}
       />
