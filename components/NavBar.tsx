@@ -17,8 +17,7 @@ export default function NavBar() {
       const x = e.clientX - rect.left - rect.width / 2
       const y = e.clientY - rect.top - rect.height / 2
       
-      animate({
-        targets: el,
+      animate(el, {
         translateX: x * 0.3,
         translateY: y * 0.3,
         duration: 400,
@@ -27,8 +26,7 @@ export default function NavBar() {
     }
 
     const handleMouseLeave = (el: Element) => {
-      animate({
-        targets: el,
+      animate(el, {
         translateX: 0,
         translateY: 0,
         duration: 600,

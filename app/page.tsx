@@ -29,8 +29,7 @@ const AnimatedTitle = ({ text }: { text: string }) => {
   useEffect(() => {
     if (containerRef.current) {
       const chars = containerRef.current.querySelectorAll('.char')
-      animate({
-        targets: chars,
+      animate(chars, {
         translateY: [100, 0],
         opacity: [0, 1],
         delay: anime.stagger(25, { start: 300 }),
