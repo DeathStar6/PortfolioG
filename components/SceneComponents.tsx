@@ -39,6 +39,13 @@ const generateCirclePoints = (n: number, radius: number) => {
   return pos
 }
 
+// --- HIGH PERFORMANCE SCRATCH MEMORY ---
+const _v1 = new THREE.Vector3()
+const _v2 = new THREE.Vector3()
+const _v3 = new THREE.Vector3()
+const _m1 = new THREE.Matrix4()
+const _q1 = new THREE.Quaternion()
+
 export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
   const pointsRef = useRef<THREE.Points>(null!)
   const linesRef = useRef<THREE.LineSegments>(null!)
@@ -67,61 +74,62 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
     const velocity = delta > 0 ? Math.abs(ds / delta) : 0
     lastScroll.current = s
 
-    // Morph Factor: 0 -> 1 over the first 30% of scroll
-    const morphP = Math.min(s / 0.3, 1)
-    const morphCurve = THREE.MathUtils.smoothstep(morphP, 0, 1)
+    // Morph Factor: 0 -> 1 over the first 25% of scroll (Faster morph)
+    const morphCurve = THREE.MathUtils.smoothstep(Math.min(s / 0.25, 1), 0, 1)
 
-    const velBase = 0.5 + Math.min(velocity * 2, 2)
-    currentRotation.current += delta * velBase * 0.15
+    const velBase = 0.5 + Math.min(velocity * 3, 4)
+    currentRotation.current += delta * velBase * 0.12
     
-    // Rotations (Speed up as we scroll)
-    const rotSpeed = 1 + morphCurve * 2
+    const rotSpeed = 1 + morphCurve * 2.5
     pointsRef.current.rotation.y = currentRotation.current * rotSpeed
     pointsRef.current.rotation.x = currentRotation.current * 0.3 * rotSpeed
     linesRef.current.rotation.y = currentRotation.current * rotSpeed
     linesRef.current.rotation.x = currentRotation.current * 0.3 * rotSpeed
 
-    const mx = (mouse.x * viewport.width) / 2
-    const my = (mouse.y * viewport.height) / 2
-    const mouseV = new THREE.Vector3(mx, my, 0)
+    // Optimized Mouse Vector
+    _v1.set((mouse.x * viewport.width) / 2, (mouse.y * viewport.height) / 2, 0)
 
     const positions = pointsRef.current.geometry.attributes.position.array as Float32Array
     const linePos = linesRef.current.geometry.attributes.position.array as Float32Array
     
+    // Performance Lock: No allocations in this loop
     for (let i = 0; i < 3000; i++) {
         const i3 = i * 3
         
-        // Morph interpolation
-        const tx = THREE.MathUtils.lerp(circlePositions[i3], spherePositions[i3], morphCurve)
-        const ty = THREE.MathUtils.lerp(circlePositions[i3+1], spherePositions[i3+1], morphCurve)
-        const tz = THREE.MathUtils.lerp(circlePositions[i3+2], spherePositions[i3+2], morphCurve)
+        // 1. Morph interpolation
+        const tx = circlePositions[i3] + (spherePositions[i3] - circlePositions[i3]) * morphCurve
+        const ty = circlePositions[i3+1] + (spherePositions[i3+1] - circlePositions[i3+1]) * morphCurve
+        const tz = circlePositions[i3+2] + (spherePositions[i3+2] - circlePositions[i3+2]) * morphCurve
 
-        const p = new THREE.Vector3(tx, ty, tz)
-        p.applyQuaternion(pointsRef.current.quaternion)
+        // 2. Rotation transform
+        _v2.set(tx, ty, tz).applyQuaternion(pointsRef.current.quaternion)
         
-        // Enhanced Magnetic Chaos based on scroll
-        const dist = p.distanceTo(mouseV)
-        const magneticStrength = 0.15 + morphCurve * 0.2
-        const force = Math.max(0, 18 - dist) / 18
-        const pull = mouseV.clone().sub(p).multiplyScalar(force * magneticStrength)
+        // 3. Magnetic pull calculation (Zero allocation)
+        const dist = _v2.distanceTo(_v1)
+        const force = Math.max(0, 20 - dist) / 20
+        const magneticStrength = (0.2 + morphCurve * 0.35) * force
         
-        const finalX = tx + pull.x
-        const finalY = ty + pull.y
-        const finalZ = tz + pull.z
+        // Apply pull back to local space
+        _v3.subVectors(_v1, _v2).multiplyScalar(magneticStrength)
         
-        positions[i3] = finalX; positions[i3+1] = finalY; positions[i3+2] = finalZ
-        linePos[i3] = finalX; linePos[i3+1] = finalY; linePos[i3+2] = finalZ
+        positions[i3] = tx + _v3.x
+        positions[i3+1] = ty + _v3.y
+        positions[i3+2] = tz + _v3.z
+        
+        // Sync Line Geometry
+        linePos[i3] = positions[i3]
+        linePos[i3+1] = positions[i3+1]
+        linePos[i3+2] = positions[i3+2]
     }
     
     pointsRef.current.geometry.attributes.position.needsUpdate = true
     linesRef.current.geometry.attributes.position.needsUpdate = true
     
-    // Line visibility fades in as we scatter
     if (linesRef.current.material instanceof THREE.Material) {
-      linesRef.current.material.opacity = morphCurve * 0.08
+      linesRef.current.material.opacity = morphCurve * 0.12
     }
 
-    const pulse = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.03
+    const pulse = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.04
     pointsRef.current.scale.setScalar(pulse)
     linesRef.current.scale.setScalar(pulse)
   })
@@ -139,10 +147,10 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
           />
         </bufferGeometry>
         <pointsMaterial 
-          size={0.16} 
+          size={0.18} 
           color="#ffffff" 
           transparent 
-          opacity={0.5} 
+          opacity={0.6} 
           sizeAttenuation 
           blending={THREE.AdditiveBlending}
         />
@@ -240,17 +248,15 @@ export function CameraRig({ scroll }: { scroll: MotionValue<number> }) {
   
   const stations = useMemo(() => [
     { threshold: 0.00, pos: [0, 0, 36], look: [0, 0, 0] },
-    { threshold: 0.33, pos: [-18, 6, 24], look: [-10, 0, 0] },
-    { threshold: 0.66, pos: [18, -6, 14], look: [10, 0, 0] },
-    { threshold: 1.00, pos: [0, 0, 20], look: [0, 0, 0] }
+    { threshold: 0.25, pos: [-22, 8, 26], look: [-12, 0, 0] },  // Tighter & further
+    { threshold: 0.50, pos: [22, -8, 18], look: [12, 0, 0] },   // Tighter & further
+    { threshold: 0.75, pos: [0, 0, 22], look: [0, 0, 0] }
   ], [])
 
   useFrame((state) => {
-    // 1. Simulated Input Latency (Dampened update)
     const s = scroll.get()
-    bufferedScroll.current = THREE.MathUtils.lerp(bufferedScroll.current, s, 0.1)
+    bufferedScroll.current = THREE.MathUtils.lerp(bufferedScroll.current, s, 0.15) // Snappier
     
-    // 2. Determine target station
     let target = stations[0]
     let next = stations[1]
     
@@ -267,10 +273,11 @@ export function CameraRig({ scroll }: { scroll: MotionValue<number> }) {
     const tPos = new THREE.Vector3().fromArray(target.pos).lerp(new THREE.Vector3().fromArray(next.pos), curveP)
     const tLook = new THREE.Vector3().fromArray(target.look).lerp(new THREE.Vector3().fromArray(next.look), curveP)
 
+    // Higher responsiveness to motion
     const distToStation = Math.min(Math.abs(localP), Math.abs(1 - localP))
-    const alphaBase = THREE.MathUtils.lerp(0.03, 0.08, Math.min(distToStation * 10, 1))
+    const alphaBase = THREE.MathUtils.lerp(0.04, 0.12, Math.min(distToStation * 8, 1))
     
-    const overshootFactor = Math.sin(curveP * Math.PI) * 2 * (1 - curveP) 
+    const overshootFactor = Math.sin(curveP * Math.PI) * 4 * (1 - curveP) 
     tPos.z -= overshootFactor
 
     // Satisfy Immutability lint by using object methods rather than direct assignment on props
