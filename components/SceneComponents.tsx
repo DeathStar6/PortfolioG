@@ -57,6 +57,7 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
           count={3000} 
           array={points} 
           itemSize={3} 
+          args={[points, 3]}
         />
       </bufferGeometry>
       <pointsMaterial 
