@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react'
 import { animate, stagger } from 'animejs'
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion'
 import { 
   Rocket, 
   BrainCircuit, 
