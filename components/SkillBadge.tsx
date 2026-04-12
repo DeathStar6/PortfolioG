@@ -14,8 +14,8 @@ export default function SkillBadge({ name }: SkillBadgeProps) {
         {name}
       </span>
       <motion.div 
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
+        animate={{ opacity: [1, 1, 0, 0] }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "linear", times: [0, 0.5, 0.5, 1] }}
         className="w-[3px] h-3 bg-white/20 group-hover:bg-white transition-colors"
       />
     </motion.div>
