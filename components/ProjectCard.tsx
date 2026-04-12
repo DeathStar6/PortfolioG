@@ -1,7 +1,6 @@
 "use client"
 
-import { useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
+import { motion, useMotionValue, useSpring, useTransform, MotionValue } from 'framer-motion'
 import { Github, ExternalLink, Zap } from 'lucide-react'
 
 interface ProjectCardProps {
@@ -10,11 +9,11 @@ interface ProjectCardProps {
   techStack: string[]
   github?: string
   link?: string
+  index: number
+  scrollY: MotionValue<number>
 }
 
-export default function ProjectCard({ title, description, techStack, github, link }: ProjectCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  
+export default function ProjectCard({ title, description, techStack, github, link, index, scrollY }: ProjectCardProps) {
   // 1. Hover Physics
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -23,23 +22,27 @@ export default function ProjectCard({ title, description, techStack, github, lin
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"])
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"])
 
-  // 2. Focal Pop Engine (Tracking position relative to viewport)
-  const { scrollXProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"]
-  })
+  // 2. Deterministic Focal Engine
+  // Map index to a specific "focus moment" in the scroll timeline (0.25 -> 0.7 range)
+  const targetThreshold = 0.3 + (index * 0.1) 
+  
+  // Transform scroll into a unique 'focal progress' (0 -> 1 -> 0) for this card
+  const focalProgress = useTransform(
+    scrollY, 
+    [targetThreshold - 0.1, targetThreshold, targetThreshold + 0.1], 
+    [0, 1, 0]
+  )
 
-  // Smooth out the focal mapping
-  const smoothFocalProgress = useSpring(scrollXProgress, { stiffness: 100, damping: 30 })
-
-  // Map focal progress to visual states (Peak at 0.5 - Center of viewport)
-  const scale = useTransform(smoothFocalProgress, [0, 0.5, 1], [0.85, 1.1, 0.85])
-  const opacity = useTransform(smoothFocalProgress, [0, 0.5, 1], [0.4, 1, 0.4])
-  const blur = useTransform(smoothFocalProgress, (v) => {
-    const intensity = Math.abs(v - 0.5) * 20 // Max 10px blur at edges
+  const scale = useTransform(focalProgress, [0, 1], [0.85, 1.1])
+  const opacity = useTransform(focalProgress, [0, 1], [0.4, 1])
+  const zIndex = useTransform(focalProgress, [0, 0.5, 1], [1, 10, 50])
+  
+  const blurValue = useTransform(focalProgress, (v) => {
+    const intensity = (1 - v) * 8 // Max 8px blur when out of focus
     return `blur(${intensity}px)`
   })
-  const shadowIntensity = useTransform(smoothFocalProgress, [0, 0.5, 1], [0, 1, 0])
+
+  const shadowColor = useTransform(focalProgress, [0, 1], ["rgba(99,102,241,0)", "rgba(99,102,241,0.5)"])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -55,7 +58,7 @@ export default function ProjectCard({ title, description, techStack, github, lin
   }
 
   return (
-    <div ref={cardRef} className="flex-shrink-0 py-20">
+    <div className="flex-shrink-0 py-20">
       <motion.div 
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -64,9 +67,10 @@ export default function ProjectCard({ title, description, techStack, github, lin
           rotateY, 
           scale, 
           opacity, 
-          filter: blur,
+          filter: blurValue,
+          zIndex,
           transformStyle: "preserve-3d",
-          boxShadow: useTransform(shadowIntensity, [0, 1], ["0 0 0 rgba(99,102,241,0)", "0 25px 50px -12px rgba(99,102,241,0.5)"])
+          boxShadow: useTransform(shadowColor, (v) => `0 25px 50px -12px ${v}`)
         }}
         className="glass-card p-10 group relative w-[450px] overflow-hidden cursor-pointer"
       >

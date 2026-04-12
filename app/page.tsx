@@ -273,8 +273,8 @@ export default function Home() {
             style={{ x: useTransform(smoothScroll, [0.25, 0.7], ["0%", "-70%"]) }}
             className="cinema-strip px-6"
           >
-            {projects.map((project) => (
-              <ProjectCard key={project.title} {...project} />
+            {projects.map((project, i) => (
+              <ProjectCard key={project.title} {...project} index={i} scrollY={smoothScroll} />
             ))}
           </motion.div>
         </div>
