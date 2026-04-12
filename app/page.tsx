@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import { animate } from 'animejs'
+import { animate, stagger } from 'animejs'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { 
   Rocket, 
@@ -32,7 +32,7 @@ const AnimatedTitle = ({ text }: { text: string }) => {
       animate(chars, {
         translateY: [100, 0],
         opacity: [0, 1],
-        delay: anime.stagger(25, { start: 300 }),
+        delay: stagger(25, { start: 300 }),
         easing: 'cubicBezier(.215, .61, .355, 1)',
         duration: 1000
       })
