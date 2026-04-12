@@ -25,6 +25,20 @@ const generateSpherePoints = (n: number, radius: number) => {
   return pos
 }
 
+// 2D Circle distribution for the Hero Halo
+const generateCirclePoints = (n: number, radius: number) => {
+  const pos = new Float32Array(n * 3)
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 2
+    // Add micro-jitter for a more organic 'technical' look
+    const jitter = (Math.random() - 0.5) * 0.5
+    pos[i * 3] = (radius + jitter) * Math.cos(angle)
+    pos[i * 3 + 1] = (radius + jitter) * Math.sin(angle)
+    pos[i * 3 + 2] = 0 // Flat XY plane
+  }
+  return pos
+}
+
 export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
   const pointsRef = useRef<THREE.Points>(null!)
   const linesRef = useRef<THREE.LineSegments>(null!)
@@ -32,14 +46,15 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
   const lastScroll = useRef(0)
   const currentRotation = useRef(0)
 
-  // 1. Point Data
-  const originalPositions = useMemo(() => generateSpherePoints(3000, 15), [])
-  const currentPositions = useMemo(() => new Float32Array(originalPositions), [originalPositions])
+  // 1. Dual-State Data
+  const circlePositions = useMemo(() => generateCirclePoints(3000, 10), [])
+  const spherePositions = useMemo(() => generateSpherePoints(3000, 15), [])
+  const currentPositions = useMemo(() => new Float32Array(circlePositions), [circlePositions])
 
-  // 2. Connectivity (Edges) - Pre-calculated for performance
+  // 2. Connectivity (Edges)
   const lineIndices = useMemo(() => {
     const indices: number[] = []
-    for (let i = 0; i < 3000; i += 4) { // Connect every 4th point in a pattern
+    for (let i = 0; i < 3000; i += 4) {
       indices.push(i, (i + 1) % 3000)
       if (i % 20 === 0) indices.push(i, (i + 10) % 3000)
     }
@@ -47,19 +62,24 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
   }, [])
 
   useFrame((state, delta) => {
-    const currentScroll = scroll.get()
-    const ds = currentScroll - lastScroll.current
+    const s = scroll.get()
+    const ds = s - lastScroll.current
     const velocity = delta > 0 ? Math.abs(ds / delta) : 0
-    lastScroll.current = currentScroll
+    lastScroll.current = s
+
+    // Morph Factor: 0 -> 1 over the first 30% of scroll
+    const morphP = Math.min(s / 0.3, 1)
+    const morphCurve = THREE.MathUtils.smoothstep(morphP, 0, 1)
 
     const velBase = 0.5 + Math.min(velocity * 2, 2)
     currentRotation.current += delta * velBase * 0.15
     
-    // Sycned Rotations
-    pointsRef.current.rotation.y = currentRotation.current
-    pointsRef.current.rotation.x = currentRotation.current * 0.3
-    linesRef.current.rotation.y = currentRotation.current
-    linesRef.current.rotation.x = currentRotation.current * 0.3
+    // Rotations (Speed up as we scroll)
+    const rotSpeed = 1 + morphCurve * 2
+    pointsRef.current.rotation.y = currentRotation.current * rotSpeed
+    pointsRef.current.rotation.x = currentRotation.current * 0.3 * rotSpeed
+    linesRef.current.rotation.y = currentRotation.current * rotSpeed
+    linesRef.current.rotation.x = currentRotation.current * 0.3 * rotSpeed
 
     const mx = (mouse.x * viewport.width) / 2
     const my = (mouse.y * viewport.height) / 2
@@ -70,24 +90,37 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
     
     for (let i = 0; i < 3000; i++) {
         const i3 = i * 3
-        const p = new THREE.Vector3(originalPositions[i3], originalPositions[i3+1], originalPositions[i3+2])
+        
+        // Morph interpolation
+        const tx = THREE.MathUtils.lerp(circlePositions[i3], spherePositions[i3], morphCurve)
+        const ty = THREE.MathUtils.lerp(circlePositions[i3+1], spherePositions[i3+1], morphCurve)
+        const tz = THREE.MathUtils.lerp(circlePositions[i3+2], spherePositions[i3+2], morphCurve)
+
+        const p = new THREE.Vector3(tx, ty, tz)
         p.applyQuaternion(pointsRef.current.quaternion)
         
+        // Enhanced Magnetic Chaos based on scroll
         const dist = p.distanceTo(mouseV)
+        const magneticStrength = 0.15 + morphCurve * 0.2
         const force = Math.max(0, 18 - dist) / 18
-        const pull = mouseV.clone().sub(p).multiplyScalar(force * 0.15)
+        const pull = mouseV.clone().sub(p).multiplyScalar(force * magneticStrength)
         
-        const newX = originalPositions[i3] + pull.x
-        const newY = originalPositions[i3+1] + pull.y
-        const newZ = originalPositions[i3+2] + pull.z
+        const finalX = tx + pull.x
+        const finalY = ty + pull.y
+        const finalZ = tz + pull.z
         
-        positions[i3] = newX; positions[i3+1] = newY; positions[i3+2] = newZ
-        linePos[i3] = newX; linePos[i3+1] = newY; linePos[i3+2] = newZ
+        positions[i3] = finalX; positions[i3+1] = finalY; positions[i3+2] = finalZ
+        linePos[i3] = finalX; linePos[i3+1] = finalY; linePos[i3+2] = finalZ
     }
     
     pointsRef.current.geometry.attributes.position.needsUpdate = true
     linesRef.current.geometry.attributes.position.needsUpdate = true
     
+    // Line visibility fades in as we scatter
+    if (linesRef.current.material instanceof THREE.Material) {
+      linesRef.current.material.opacity = morphCurve * 0.08
+    }
+
     const pulse = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.03
     pointsRef.current.scale.setScalar(pulse)
     linesRef.current.scale.setScalar(pulse)
@@ -106,10 +139,10 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
           />
         </bufferGeometry>
         <pointsMaterial 
-          size={0.15} 
+          size={0.16} 
           color="#ffffff" 
           transparent 
-          opacity={0.4} 
+          opacity={0.5} 
           sizeAttenuation 
           blending={THREE.AdditiveBlending}
         />
@@ -135,7 +168,7 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
         <lineBasicMaterial 
           color="#ffffff" 
           transparent 
-          opacity={0.06} 
+          opacity={0} 
           blending={THREE.AdditiveBlending} 
         />
       </lineSegments>
