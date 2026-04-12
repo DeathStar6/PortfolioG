@@ -307,7 +307,7 @@ export default function Home() {
         <div className="flex justify-center gap-8">
           {[
             { label: "GitHub", icon: <Github size={16} />, href: "https://github.com/DeathStar6" },
-            { label: "LinkedIn", icon: <Linkedin size={16} />, href: "https://linkedin.com/in/subhajit-chatterjee" },
+            { label: "LinkedIn", icon: <Linkedin size={16} />, href: "https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/" },
             { label: "Email", icon: <Mail size={16} />, href: "mailto:subhajitc939@gmail.com" }
           ].map((link) => (
             <a

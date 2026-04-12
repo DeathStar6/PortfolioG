@@ -66,7 +66,7 @@ export default function NavBar() {
           <a href="https://github.com/DeathStar6" target="_blank" className="nav-link text-zinc-500 hover:text-white transition-opacity">
             <Github size={18} />
           </a>
-          <a href="https://linkedin.com/in/subhajit-chatterjee" target="_blank" className="nav-link text-zinc-500 hover:text-white transition-opacity">
+          <a href="https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/" target="_blank" className="nav-link text-zinc-500 hover:text-white transition-opacity">
             <Linkedin size={18} />
           </a>
           <a href="mailto:subhajitc939@gmail.com" className="nav-link text-zinc-500 hover:text-white transition-opacity">

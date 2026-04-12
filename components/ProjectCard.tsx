@@ -91,12 +91,22 @@ export default function ProjectCard({ title, description, techStack, github, lin
 
             <div className="flex gap-6">
               {github && (
-                <a href={github} target="_blank" className="flex items-center gap-2 text-[10px] font-black text-zinc-500 hover:text-white transition-colors tracking-widest">
+                <a 
+                  href={github} 
+                  target="_blank" 
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-2 text-[10px] font-black text-zinc-500 hover:text-white transition-colors tracking-widest"
+                >
                   <Github size={14} /> SOURCE //
                 </a>
               )}
               {link && (
-                <a href={link} target="_blank" className="flex items-center gap-2 text-[10px] font-black text-zinc-500 hover:text-white transition-colors tracking-widest">
+                <a 
+                  href={link} 
+                  target="_blank" 
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-2 text-[10px] font-black text-zinc-500 hover:text-white transition-colors tracking-widest"
+                >
                   <ExternalLink size={14} /> EXPLORE //
                 </a>
               )}
