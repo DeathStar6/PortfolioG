@@ -58,6 +58,11 @@ export default function Home() {
     offset: ["start start", "end end"]
   })
 
+  // 1. Skew Engine (The "Wow" Factor)
+  const scrollVelocity = useVelocity(scrollYProgress)
+  const skewBase = useTransform(scrollVelocity, [-0.5, 0.5], [-5, 5])
+  const skewY = useSpring(skewBase, { stiffness: 150, damping: 40 })
+
   const smoothScroll = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -114,6 +119,8 @@ export default function Home() {
         className="neural-progress" 
         style={{ scaleX: smoothScroll }} 
       />
+
+      <motion.div style={{ skewY }}>
 
       <section className="relative h-[120vh] flex items-center justify-center px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto text-center space-y-12">
@@ -284,28 +291,45 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="skills" className="py-40 px-6 bg-zinc-950/50">
+      <section id="skills" className="py-32 px-6 relative z-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-12">
-            {skills.map((skillGroup, i) => (
-              <motion.div 
-                key={skillGroup.category}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-20"
+          >
+            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4">
+              CAPABILITIES_<span className="text-zinc-500 text-2xl font-mono tracking-normal ml-4">[ SYSTEM_AUDIT ]</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-0 border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+            {skills.map((skill, idx) => (
+              <motion.div
+                key={skill.category}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="glass-card p-12 space-y-12 group"
+                transition={{ delay: idx * 0.1 }}
+                className="group p-10 border border-white/5 bg-black/40 backdrop-blur-sm relative overflow-hidden"
               >
-                <div className="flex items-center justify-between">
-                  <div className="text-indigo-400">{skillGroup.icon}</div>
-                  <span className="text-[10px] font-black text-zinc-700 uppercase tracking-widest">0{i+1}</span>
+                <div className="absolute top-0 right-0 p-4 text-white/5 group-hover:text-white/10 transition-colors">
+                  {skill.icon}
                 </div>
-                <h3 className="text-3xl font-bold text-white tracking-tighter">{skillGroup.category.toUpperCase()}</h3>
-                <div className="flex flex-wrap gap-3">
-                  {skillGroup.items.map((item) => (
+                
+                <h3 className="text-[10px] font-black uppercase tracking-[0.35em] text-zinc-500 mb-8 border-b border-white/10 pb-4 group-hover:text-white transition-colors">
+                  {skill.category}
+                </h3>
+                
+                <div className="flex flex-wrap gap-2 relative z-10">
+                  {skill.items.map((item) => (
                     <SkillBadge key={item} name={item} />
                   ))}
                 </div>
+
+                {/* Industrial Scan-line effect */}
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.div>
             ))}
           </div>
@@ -358,6 +382,7 @@ export default function Home() {
           METICULOUSLY CRAFTED @ 2026. SC_ENGINEERING_DOCS
         </p>
       </footer>
+      </motion.div>
     </main>
   )
 }

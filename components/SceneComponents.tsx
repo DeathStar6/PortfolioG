@@ -27,12 +27,24 @@ const generateSpherePoints = (n: number, radius: number) => {
 
 export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
   const pointsRef = useRef<THREE.Points>(null!)
+  const linesRef = useRef<THREE.LineSegments>(null!)
   const { mouse, viewport } = useThree()
   const lastScroll = useRef(0)
   const currentRotation = useRef(0)
 
+  // 1. Point Data
   const originalPositions = useMemo(() => generateSpherePoints(3000, 15), [])
   const currentPositions = useMemo(() => new Float32Array(originalPositions), [originalPositions])
+
+  // 2. Connectivity (Edges) - Pre-calculated for performance
+  const lineIndices = useMemo(() => {
+    const indices: number[] = []
+    for (let i = 0; i < 3000; i += 4) { // Connect every 4th point in a pattern
+      indices.push(i, (i + 1) % 3000)
+      if (i % 20 === 0) indices.push(i, (i + 10) % 3000)
+    }
+    return new Uint16Array(indices)
+  }, [])
 
   useFrame((state, delta) => {
     const currentScroll = scroll.get()
@@ -40,67 +52,94 @@ export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
     const velocity = delta > 0 ? Math.abs(ds / delta) : 0
     lastScroll.current = currentScroll
 
-    // 1. Kinetic Energy
     const velBase = 0.5 + Math.min(velocity * 2, 2)
-    currentRotation.current += delta * velBase * 0.2
+    currentRotation.current += delta * velBase * 0.15
     
+    // Sycned Rotations
     pointsRef.current.rotation.y = currentRotation.current
     pointsRef.current.rotation.x = currentRotation.current * 0.3
+    linesRef.current.rotation.y = currentRotation.current
+    linesRef.current.rotation.x = currentRotation.current * 0.3
 
-    // 2. Magnetic Interaction (Mouse Projection)
     const mx = (mouse.x * viewport.width) / 2
     const my = (mouse.y * viewport.height) / 2
     const mouseV = new THREE.Vector3(mx, my, 0)
 
     const positions = pointsRef.current.geometry.attributes.position.array as Float32Array
+    const linePos = linesRef.current.geometry.attributes.position.array as Float32Array
     
     for (let i = 0; i < 3000; i++) {
         const i3 = i * 3
-        const x = originalPositions[i3]
-        const y = originalPositions[i3 + 1]
-        const z = originalPositions[i3 + 2]
-        
-        // Transform original to world-relative (simple version)
-        const p = new THREE.Vector3(x, y, z)
+        const p = new THREE.Vector3(originalPositions[i3], originalPositions[i3+1], originalPositions[i3+2])
         p.applyQuaternion(pointsRef.current.quaternion)
         
         const dist = p.distanceTo(mouseV)
-        const force = Math.max(0, 15 - dist) / 15
+        const force = Math.max(0, 18 - dist) / 18
+        const pull = mouseV.clone().sub(p).multiplyScalar(force * 0.15)
         
-        // Apply magnetic pull toward mouse
-        const pull = mouseV.clone().sub(p).multiplyScalar(force * 0.1)
+        const newX = originalPositions[i3] + pull.x
+        const newY = originalPositions[i3+1] + pull.y
+        const newZ = originalPositions[i3+2] + pull.z
         
-        positions[i3] = x + pull.x
-        positions[i3 + 1] = y + pull.y
-        positions[i3 + 2] = z + pull.z
+        positions[i3] = newX; positions[i3+1] = newY; positions[i3+2] = newZ
+        linePos[i3] = newX; linePos[i3+1] = newY; linePos[i3+2] = newZ
     }
     
     pointsRef.current.geometry.attributes.position.needsUpdate = true
+    linesRef.current.geometry.attributes.position.needsUpdate = true
     
-    const pulse = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.02
+    const pulse = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.03
     pointsRef.current.scale.setScalar(pulse)
+    linesRef.current.scale.setScalar(pulse)
   })
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute 
-          attach="attributes-position" 
-          count={3000} 
-          array={currentPositions} 
-          itemSize={3} 
-          args={[currentPositions, 3]}
+    <group>
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute 
+            attach="attributes-position" 
+            count={3000} 
+            array={currentPositions} 
+            itemSize={3} 
+            args={[currentPositions, 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial 
+          size={0.15} 
+          color="#ffffff" 
+          transparent 
+          opacity={0.4} 
+          sizeAttenuation 
+          blending={THREE.AdditiveBlending}
         />
-      </bufferGeometry>
-      <pointsMaterial 
-        size={0.12} 
-        color="#ffffff" 
-        transparent 
-        opacity={0.5} 
-        sizeAttenuation 
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
+      </points>
+
+      <lineSegments ref={linesRef}>
+        <bufferGeometry>
+          <bufferAttribute 
+            attach="attributes-position" 
+            count={3000} 
+            array={currentPositions} 
+            itemSize={3} 
+            args={[currentPositions, 3]}
+          />
+          <bufferAttribute
+            attach="index"
+            count={lineIndices.length}
+            array={lineIndices}
+            itemSize={1}
+            args={[lineIndices, 1]}
+          />
+        </bufferGeometry>
+        <lineBasicMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.06} 
+          blending={THREE.AdditiveBlending} 
+        />
+      </lineSegments>
+    </group>
   )
 }
 

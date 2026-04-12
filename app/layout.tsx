@@ -19,14 +19,17 @@ export const metadata: Metadata = {
   keywords: ["Subhajit Chatterjee", "AI Engineer", "Full-Stack Developer", "Next.js", "ML Developer", "Portfolio"],
 }
 
+import CustomCursor from "@/components/CustomCursor"
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${outfit.variable} antialiased selection:bg-indigo-500/30`}>
+    <html lang="en" className="scroll-smooth no-cursor">
+      <body className={`${inter.variable} ${outfit.variable} antialiased selection:bg-indigo-500/30 cursor-none`}>
+        <CustomCursor />
         <SmoothScroll>
           {children}
         </SmoothScroll>
