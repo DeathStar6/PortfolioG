@@ -1,12 +1,11 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { 
   Rocket, 
   BrainCircuit, 
   Code2, 
-  Award, 
   GraduationCap, 
   Github, 
   Linkedin, 
@@ -14,7 +13,8 @@ import {
   Terminal,
   Database,
   Cloud,
-  Cpu
+  Cpu,
+  ExternalLink
 } from 'lucide-react'
 import NavBar from '@/components/NavBar'
 import ProjectCard from '@/components/ProjectCard'
@@ -252,7 +252,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
-            {projects.map((project, i) => (
+            {projects.map((project) => (
               <ProjectCard key={project.title} {...project} />
             ))}
           </div>

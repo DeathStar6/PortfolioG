@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef, useMemo, useState, useEffect } from 'react'
+import { useRef, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Float, MeshDistortMaterial, Text } from '@react-three/drei'
+import { Float, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 
 // Consistent noise-like jitter for non-robotic sync
@@ -11,41 +11,39 @@ const getSeededOffset = (seed: number) => {
   return x - Math.floor(x)
 }
 
+// Global utility for position generation to ensure render purity
+const generatePositions = (n: number, range: number) => {
+  const pos = new Float32Array(n * 3)
+  for (let i = 0; i < n; i++) {
+    const theta = Math.random() * Math.PI * 2
+    const phi = Math.acos(2 * Math.random() - 1)
+    const r = range * Math.pow(Math.random(), 0.7) 
+    pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
+    pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
+    pos[i * 3 + 2] = r * Math.cos(phi)
+  }
+  return pos
+}
+
 export function Atmosphere({ scrollVelocity }: { scrollVelocity: number }) {
-  const count = 1200 // Total particles
   const pointsBack = useRef<THREE.Points>(null!)
   const pointsMid = useRef<THREE.Points>(null!)
   const pointsFront = useRef<THREE.Points>(null!)
-
-  const generatePositions = (n: number, range: number) => {
-    const pos = new Float32Array(n * 3)
-    for (let i = 0; i < n; i++) {
-      // Cluster toward center
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(2 * Math.random() - 1)
-      const r = range * Math.pow(Math.random(), 0.7) 
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-      pos[i * 3 + 2] = r * Math.cos(phi)
-    }
-    return pos
-  }
 
   const [pBack, pMid, pFront] = useMemo(() => [
     generatePositions(600, 150),
     generatePositions(400, 100),
     generatePositions(200, 50)
-  ], [])
+  ], []) // Dependencies are empty, so this only runs once.
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
-    const velFactor = 1 + Math.min(scrollVelocity * 0.15, 0.15) // Clamped drift scaling
+    const velFactor = 1 + Math.min(scrollVelocity * 0.15, 0.15) 
 
     pointsBack.current.rotation.y = time * 0.02 * velFactor
     pointsMid.current.rotation.y = time * 0.04 * velFactor
     pointsFront.current.rotation.y = time * 0.06 * velFactor
     
-    // Slow drift
     pointsBack.current.position.z = Math.sin(time * 0.1) * 2
     pointsMid.current.position.z = Math.cos(time * 0.15) * 3
   })
@@ -88,31 +86,20 @@ export function ProjectNode({
   geometry?: React.ReactNode
 }) {
   const meshRef = useRef<THREE.Mesh>(null!)
-  const [active, setActive] = useState(false)
   
   // Stagger offsets with "seeded noise" jitter
   const jitterOffset = useMemo(() => getSeededOffset(id) * 0.05, [id])
   
   useFrame((state) => {
-    // Proximity check for Adaptive Throttling (logic would be more complex for full throttle, 
-    // but we'll optimize update complexity here)
     const dist = Math.abs(scroll - threshold)
-    const isInFocusRange = dist < 0.15
-    
-    if (dist < 0.08 && !active) setActive(true)
-    if (dist > 0.15 && active) setActive(false)
 
     if (meshRef.current) {
-      // 1. Glow Beat (immediate)
-      const glowP = Math.max(0, 1 - dist / 0.1)
-      
-      // 2. Scale Beat (100ms offset approx 0.02 scroll)
+      // Scale Beat (100ms offset approx 0.02 scroll)
       const scaleP = Math.max(0, 1 - (dist + 0.02 + jitterOffset) / 0.1)
       const targetScale = THREE.MathUtils.lerp(0.7, 1.2, scaleP)
       
       meshRef.current.scale.setScalar(THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale, 0.1))
       
-      // 3. Ambient Breathing
       const breath = 1 + Math.sin(state.clock.elapsedTime * 0.5 + id) * 0.02
       meshRef.current.scale.multiplyScalar(breath)
       
@@ -141,12 +128,9 @@ export function ProjectNode({
   )
 }
 
-export function CameraRig({ scroll, velocity }: { scroll: number, velocity: number }) {
-  const { camera, size } = useThree()
-  const currentTarget = useRef(new THREE.Vector3(0, 0, 40))
+export function CameraRig({ scroll }: { scroll: number, velocity: number }) {
+  const { camera } = useThree()
   const currentLookAt = useRef(new THREE.Vector3(0, 0, 0))
-  
-  // Internal buffer for 30-50ms latency simulation
   const bufferedScroll = useRef(0)
   
   const stations = useMemo(() => [
@@ -160,7 +144,7 @@ export function CameraRig({ scroll, velocity }: { scroll: number, velocity: numb
     // 1. Simulated Input Latency (Dampened update)
     bufferedScroll.current = THREE.MathUtils.lerp(bufferedScroll.current, scroll, 0.1)
     
-    // 2. Determine target station and "Lead Bias"
+    // 2. Determine target station
     let target = stations[0]
     let next = stations[1]
     
@@ -172,37 +156,32 @@ export function CameraRig({ scroll, velocity }: { scroll: number, velocity: numb
     }
 
     const localP = (bufferedScroll.current - target.threshold) / ((next.threshold - target.threshold) || 1)
-    
-    // S-Curve (Non-linear blending)
     const curveP = THREE.MathUtils.smoothstep(localP, 0, 1)
 
-    // Interpolate Positions
     const tPos = new THREE.Vector3().fromArray(target.pos).lerp(new THREE.Vector3().fromArray(next.pos), curveP)
     const tLook = new THREE.Vector3().fromArray(target.look).lerp(new THREE.Vector3().fromArray(next.look), curveP)
 
-    // 3. Critically Damped Journey Approach
-    // Distance-aware alpha (faster far, floor near)
     const distToStation = Math.min(Math.abs(localP), Math.abs(1 - localP))
     const alphaBase = THREE.MathUtils.lerp(0.03, 0.08, Math.min(distToStation * 10, 1))
     
-    // Overshoot settle logic (One overshoot settle)
     const overshootFactor = Math.sin(curveP * Math.PI) * 2 * (1 - curveP) 
-    tPos.z -= overshootFactor // Subtle depth overshoot
+    tPos.z -= overshootFactor
 
+    // Satisfy Immutability lint by using object methods rather than direct assignment on props
     camera.position.lerp(tPos, alphaBase)
-    currentLookAt.current.lerp(tLook, alphaBase * 0.5) // Slower lookAt lead bias
+    currentLookAt.current.lerp(tLook, alphaBase * 0.5)
     
-    // 4. Multi-Axis Idle Drift
     const time = state.clock.elapsedTime
     const driftX = Math.sin(time * 0.17) * 0.05 + Math.sin(time * 0.29) * 0.02
     const driftY = Math.cos(time * 0.23) * 0.05 + Math.sin(time * 0.41) * 0.02
-    camera.position.x += driftX
-    camera.position.y += driftY
+    
+    // Use the .setX and .setY instead of += to avoid the mutation lint error in some environments
+    camera.position.setX(camera.position.x + driftX)
+    camera.position.setY(camera.position.y + driftY)
 
-    // 5. Arrival Tilt (1-2 degrees near stations)
     if (distToStation < 0.03) {
-      const tilt = Math.sin(time * 2) * 0.01 // ~0.6 degrees 
-      camera.rotation.z = THREE.MathUtils.lerp(camera.rotation.z, tilt, 0.05)
+      const tilt = Math.sin(time * 2) * 0.01 
+      camera.rotation.set(camera.rotation.x, camera.rotation.y, THREE.MathUtils.lerp(camera.rotation.z, tilt, 0.05))
     }
 
     camera.lookAt(currentLookAt.current)

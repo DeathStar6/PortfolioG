@@ -1,17 +1,17 @@
 "use client"
 
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
-import * as THREE from 'three'
 import { Atmosphere, CameraRig, ProjectNode } from './SceneComponents'
 
 export default function BackgroundScene() {
   const [scroll, setScroll] = useState(0)
   const [velocity, setVelocity] = useState(0)
   const lastScroll = useRef(0)
-  const lastTime = useRef(Date.now())
+  const lastTime = useRef(0)
 
   useEffect(() => {
+    lastTime.current = Date.now()
     const handleScroll = () => {
       const winScroll = window.scrollY
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight
