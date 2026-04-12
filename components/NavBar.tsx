@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Mail } from 'lucide-react'
-import anime from 'animejs'
+import { anime } from 'animejs'
 
 export default function NavBar() {
   const navItems = ["Home", "Projects", "Skills", "Contact"]

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import anime from 'animejs'
+import { anime } from 'animejs'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { 
   Rocket, 
