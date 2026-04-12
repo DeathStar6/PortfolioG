@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Mail } from 'lucide-react'
-import { anime } from 'animejs'
+import { animate } from 'animejs'
 
 export default function NavBar() {
   const navItems = ["Home", "Projects", "Skills", "Contact"]
@@ -17,7 +17,7 @@ export default function NavBar() {
       const x = e.clientX - rect.left - rect.width / 2
       const y = e.clientY - rect.top - rect.height / 2
       
-      anime({
+      animate({
         targets: el,
         translateX: x * 0.3,
         translateY: y * 0.3,
@@ -27,7 +27,7 @@ export default function NavBar() {
     }
 
     const handleMouseLeave = (el: Element) => {
-      anime({
+      animate({
         targets: el,
         translateX: 0,
         translateY: 0,

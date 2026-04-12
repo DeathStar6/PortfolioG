@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useEffect } from 'react'
-import { anime } from 'animejs'
+import { animate } from 'animejs'
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { 
   Rocket, 
@@ -29,7 +29,7 @@ const AnimatedTitle = ({ text }: { text: string }) => {
   useEffect(() => {
     if (containerRef.current) {
       const chars = containerRef.current.querySelectorAll('.char')
-      anime({
+      animate({
         targets: chars,
         translateY: [100, 0],
         opacity: [0, 1],
