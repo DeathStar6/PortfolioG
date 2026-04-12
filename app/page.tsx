@@ -48,9 +48,7 @@ const AnimatedTitle = ({ text }: { text: string }) => {
 }
 
 export default function Home() {
-  const containerRef = useRef(null)
   const { scrollYProgress } = useScroll({
-    target: containerRef,
     offset: ["start start", "end end"]
   })
 
@@ -102,7 +100,7 @@ export default function Home() {
   ]
 
   return (
-    <main ref={containerRef} className="relative min-h-screen bg-black overflow-x-hidden">
+    <main className="relative min-h-screen overflow-x-hidden">
       <NavBar />
       <BackgroundScene scroll={smoothScroll} />
       

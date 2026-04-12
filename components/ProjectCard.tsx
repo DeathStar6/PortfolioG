@@ -33,8 +33,8 @@ export default function ProjectCard({ title, description, techStack, github, lin
     [0, 1, 0]
   )
 
-  const scale = useTransform(focalProgress, [0, 1], [0.9, 1.1])
-  const opacity = useTransform(focalProgress, [0, 1], [0.6, 1])
+  const scale = useTransform(focalProgress, [0, 1], [0.95, 1.1])
+  const opacity = useTransform(focalProgress, [0, 1], [0.7, 1])
   const zIndex = useTransform(focalProgress, [0, 0.5, 1], [1, 10, 50])
   
   const blurValue = useTransform(focalProgress, (v) => {
