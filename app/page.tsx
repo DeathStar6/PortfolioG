@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react'
 import { animate, stagger } from 'animejs'
-import { motion, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion'
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { 
   Rocket, 
   BrainCircuit, 
@@ -58,10 +58,6 @@ export default function Home() {
     offset: ["start start", "end end"]
   })
 
-  // 1. Skew Engine (The "Wow" Factor)
-  const scrollVelocity = useVelocity(scrollYProgress)
-  const skewBase = useTransform(scrollVelocity, [-0.5, 0.5], [-5, 5])
-  const skewY = useSpring(skewBase, { stiffness: 150, damping: 40 })
 
   const smoothScroll = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -120,7 +116,6 @@ export default function Home() {
         style={{ scaleX: smoothScroll }} 
       />
 
-      <motion.div style={{ skewY }}>
 
       <section className="relative h-[120vh] flex items-center justify-center px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto text-center space-y-12">
@@ -382,7 +377,6 @@ export default function Home() {
           METICULOUSLY CRAFTED @ 2026. SC_ENGINEERING_DOCS
         </p>
       </footer>
-      </motion.div>
     </main>
   )
 }
