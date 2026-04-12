@@ -34,14 +34,9 @@ export default function ProjectCard({ title, description, techStack, github, lin
   )
 
   const scale = useTransform(focalProgress, [0, 1], [0.95, 1.1])
-  const opacity = useTransform(focalProgress, [0, 1], [0.7, 1])
+  const opacity = useTransform(focalProgress, [0, 1], [0.8, 1])
   const zIndex = useTransform(focalProgress, [0, 0.5, 1], [1, 10, 50])
   
-  const blurValue = useTransform(focalProgress, (v) => {
-    const intensity = (1 - v) * 4 // Max 4px blur when out of focus
-    return `blur(${intensity}px)`
-  })
-
   const shadowColor = useTransform(focalProgress, [0, 1], ["rgba(99,102,241,0)", "rgba(99,102,241,0.5)"])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -67,7 +62,6 @@ export default function ProjectCard({ title, description, techStack, github, lin
           rotateY, 
           scale, 
           opacity, 
-          filter: blurValue,
           zIndex,
           transformStyle: "preserve-3d",
           boxShadow: useTransform(shadowColor, (v) => `0 25px 50px -12px ${v}`)
