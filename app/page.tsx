@@ -255,11 +255,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative h-[300vh]" id="projects">
+      <section className="relative h-[230vh]" id="projects">
         <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
           <div className="px-6 mb-12">
             <motion.div 
-              style={{ y: useTransform(smoothScroll, [0.3, 0.45], [50, -50]) }}
+              style={{ y: useTransform(smoothScroll, [0.38, 0.45], [50, -50]) }}
               className="max-w-7xl mx-auto space-y-4"
             >
                <h2 className="text-xs font-bold tracking-[0.6em] text-zinc-600 uppercase">Curated Intelligence</h2>
@@ -268,7 +268,7 @@ export default function Home() {
           </div>
 
           <motion.div 
-            style={{ x: useTransform(smoothScroll, [0.25, 0.7], ["0%", "-70%"]) }}
+            style={{ x: useTransform(smoothScroll, [0.4, 0.58], ["0%", "-70%"]) }}
             className="cinema-strip px-6"
           >
             {projects.map((project, i) => (
@@ -278,7 +278,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="skills" className="py-60 px-6 bg-zinc-950/50">
+      <section id="skills" className="py-40 px-6 bg-zinc-950/50">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-3 gap-12">
             {skills.map((skillGroup, i) => (

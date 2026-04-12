@@ -22,19 +22,29 @@ export default function ProjectCard({ title, description, techStack, github, lin
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"])
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"])
 
-  // 2. Deterministic Focal Engine
-  // Map index to a specific "focus moment" in the scroll timeline (0.25 -> 0.7 range)
-  const targetThreshold = 0.3 + (index * 0.1) 
+  // 2. Vortex Arrival Engine (Circular -> Linear)
+  const vortexAngle = (index / 5) * Math.PI * 2 // Angle on the circle
+  const vortexStart = 0.35 // Entrance begins
+  const vortexEnd = 0.45   // Settlement into line
   
-  // Transform scroll into a unique 'focal progress' (0 -> 1 -> 0) for this card
+  const vortexProgress = useTransform(scrollY, [vortexStart, vortexEnd], [0, 1])
+  
+  // Polar to Cartesian (Converge to center vs Final position)
+  const radius = useTransform(vortexProgress, [0, 1], [500, 0])
+  const vortexX = useTransform(vortexProgress, (v) => Math.cos(vortexAngle) * (1 - v) * 500)
+  const vortexY = useTransform(vortexProgress, (v) => Math.sin(vortexAngle) * (1 - v) * 500)
+  const vortexRotation = useTransform(vortexProgress, [0, 1], [720, 0]) // Spinning into place
+  
+  // 3. Deterministic Focal Engine (Standard Cinema logic)
+  const targetThreshold = 0.4 + (index * 0.04) 
   const focalProgress = useTransform(
     scrollY, 
-    [targetThreshold - 0.1, targetThreshold, targetThreshold + 0.1], 
+    [targetThreshold - 0.05, targetThreshold, targetThreshold + 0.05], 
     [0, 1, 0]
   )
 
-  const scale = useTransform(focalProgress, [0, 1], [0.95, 1.1])
-  const opacity = useTransform(focalProgress, [0, 1], [0.8, 1])
+  const scale = useTransform(vortexProgress, [0, 0.5, 1], [0, 1.2, 1])
+  const opacity = useTransform(vortexProgress, [0, 0.4], [0, 1])
   const zIndex = useTransform(focalProgress, [0, 0.5, 1], [1, 10, 50])
   
   const shadowColor = useTransform(focalProgress, [0, 1], ["rgba(99,102,241,0)", "rgba(99,102,241,0.5)"])
@@ -63,6 +73,9 @@ export default function ProjectCard({ title, description, techStack, github, lin
           scale, 
           opacity, 
           zIndex,
+          x: vortexX,
+          y: vortexY,
+          rotate: vortexRotation,
           transformStyle: "preserve-3d",
           boxShadow: useTransform(shadowColor, (v) => `0 25px 50px -12px ${v}`)
         }}
