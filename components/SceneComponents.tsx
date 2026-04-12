@@ -25,10 +25,11 @@ const generatePositions = (n: number, range: number) => {
   return pos
 }
 
-export function Atmosphere({ scrollVelocity }: { scrollVelocity: number }) {
+export function Atmosphere({ scroll }: { scroll: MotionValue<number> }) {
   const pointsBack = useRef<THREE.Points>(null!)
   const pointsMid = useRef<THREE.Points>(null!)
   const pointsFront = useRef<THREE.Points>(null!)
+  const lastScroll = useRef(0)
 
   const [pBack, pMid, pFront] = useMemo(() => [
     generatePositions(600, 150),
@@ -36,8 +37,13 @@ export function Atmosphere({ scrollVelocity }: { scrollVelocity: number }) {
     generatePositions(200, 50)
   ], []) // Dependencies are empty, so this only runs once.
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const time = state.clock.getElapsedTime()
+    const currentScroll = scroll.get()
+    const ds = currentScroll - lastScroll.current
+    const scrollVelocity = delta > 0 ? Math.abs(ds / delta) : 0
+    lastScroll.current = currentScroll
+    
     const velFactor = 1 + Math.min(scrollVelocity * 0.15, 0.15) 
 
     pointsBack.current.rotation.y = time * 0.02 * velFactor
@@ -81,7 +87,7 @@ export function ProjectNode({
 }: { 
   position: [number, number, number], 
   id: number, 
-  scroll: number, 
+  scroll: MotionValue<number>, 
   threshold: number,
   geometry?: React.ReactNode
 }) {
@@ -91,7 +97,8 @@ export function ProjectNode({
   const jitterOffset = useMemo(() => getSeededOffset(id) * 0.05, [id])
   
   useFrame((state) => {
-    const dist = Math.abs(scroll - threshold)
+    const s = scroll.get()
+    const dist = Math.abs(s - threshold)
 
     if (meshRef.current) {
       // Scale Beat (100ms offset approx 0.02 scroll)
@@ -128,7 +135,7 @@ export function ProjectNode({
   )
 }
 
-export function CameraRig({ scroll }: { scroll: number, velocity: number }) {
+export function CameraRig({ scroll }: { scroll: MotionValue<number> }) {
   const { camera } = useThree()
   const currentLookAt = useRef(new THREE.Vector3(0, 0, 0))
   const bufferedScroll = useRef(0)
@@ -142,7 +149,8 @@ export function CameraRig({ scroll }: { scroll: number, velocity: number }) {
 
   useFrame((state) => {
     // 1. Simulated Input Latency (Dampened update)
-    bufferedScroll.current = THREE.MathUtils.lerp(bufferedScroll.current, scroll, 0.1)
+    const s = scroll.get()
+    bufferedScroll.current = THREE.MathUtils.lerp(bufferedScroll.current, s, 0.1)
     
     // 2. Determine target station
     let target = stations[0]
