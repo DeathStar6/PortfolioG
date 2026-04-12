@@ -3,6 +3,7 @@
 import { useRef, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Float, MeshDistortMaterial } from '@react-three/drei'
+import { MotionValue } from 'framer-motion'
 import * as THREE from 'three'
 
 // Consistent noise-like jitter for non-robotic sync
