@@ -106,6 +106,11 @@ export default function Home() {
       <NavBar />
       <BackgroundScene />
       
+      <motion.div 
+        className="neural-progress" 
+        style={{ scaleX: smoothScroll }} 
+      />
+
       <section className="relative h-[120vh] flex items-center justify-center px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto text-center space-y-12">
           <motion.div
@@ -183,10 +188,13 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             className="space-y-12"
           >
-            <h2 className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none">
+            <motion.h2 
+              style={{ y: useTransform(smoothScroll, [0, 0.2], [0, -100]) }}
+              className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none"
+            >
               THE_INTELLIGENT_<br />
               <span className="text-indigo-500/50 italic">APPROACH</span>
-            </h2>
+            </motion.h2>
             <p className="text-2xl md:text-4xl text-zinc-400 font-medium leading-tight max-w-2xl">
               I specialize in bridging the gap between <span className="text-white">complex AI research</span> and 
               <span className="text-white"> production-ready systems</span>. 
@@ -200,7 +208,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid lg:grid-cols-2 gap-24 items-center">
             <div className="space-y-12">
-              <h2 className="text-xs font-bold tracking-[0.5em] text-indigo-500 uppercase">Professional Timeline</h2>
+              <motion.h2 
+                style={{ x: useTransform(smoothScroll, [0.1, 0.3], [-50, 0]) }}
+                className="text-xs font-bold tracking-[0.5em] text-indigo-500 uppercase"
+              >
+                Professional Timeline
+              </motion.h2>
               <div className="space-y-20">
                 <motion.div 
                    initial={{ opacity: 0, x: -30 }}
@@ -244,18 +257,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="projects" className="py-80 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-32 text-center space-y-4">
-             <h2 className="text-xs font-bold tracking-[0.6em] text-zinc-600 uppercase">Curated Intelligence</h2>
-             <h3 className="text-7xl md:text-9xl font-black text-white tracking-tighter">PROJECTS</h3>
+      <section className="relative h-[300vh]" id="projects">
+        <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+          <div className="px-6 mb-12">
+            <motion.div 
+              style={{ y: useTransform(smoothScroll, [0.3, 0.45], [50, -50]) }}
+              className="max-w-7xl mx-auto space-y-4"
+            >
+               <h2 className="text-xs font-bold tracking-[0.6em] text-zinc-600 uppercase">Curated Intelligence</h2>
+               <h3 className="text-7xl md:text-9xl font-black text-white tracking-tighter">PROJECTS</h3>
+            </motion.div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <motion.div 
+            style={{ x: useTransform(smoothScroll, [0.25, 0.7], ["0%", "-70%"]) }}
+            className="cinema-strip px-6"
+          >
             {projects.map((project) => (
               <ProjectCard key={project.title} {...project} />
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -290,8 +311,18 @@ export default function Home() {
       <section id="contact" className="py-60 px-6 relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center space-y-24">
           <div className="space-y-6">
-            <h2 className="text-[15vw] font-black text-white/5 absolute -top-20 left-0 tracking-tighter pointer-events-none uppercase">CONNECT</h2>
-            <h3 className="text-6xl md:text-8xl font-black text-white tracking-tighter underline decoration-indigo-500/50 decoration-8 underline-offset-8">INITIATE_CONTACT</h3>
+            <motion.h2 
+              style={{ x: useTransform(smoothScroll, [0.8, 1], [-200, 200]) }}
+              className="text-[15vw] font-black text-white/5 absolute -top-20 left-0 tracking-tighter pointer-events-none uppercase"
+            >
+              CONNECT
+            </motion.h2>
+            <motion.h3 
+              style={{ scale: useTransform(smoothScroll, [0.85, 0.95], [0.8, 1]) }}
+              className="text-6xl md:text-8xl font-black text-white tracking-tighter underline decoration-indigo-500/50 decoration-8 underline-offset-8"
+            >
+              INITIATE_CONTACT
+            </motion.h3>
             <p className="text-xl text-zinc-400 font-medium max-w-lg mx-auto">Available for ambitious AI engineering roles and high-scale technical systems architectures.</p>
           </div>
           

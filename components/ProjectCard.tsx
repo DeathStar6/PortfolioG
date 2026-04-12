@@ -43,10 +43,11 @@ export default function ProjectCard({ title, description, techStack, github, lin
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="glass-card p-8 group relative overflow-hidden cursor-pointer"
+      initial={{ opacity: 0, scale: 0.9, y: 30 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="glass-card p-10 group relative flex-shrink-0 w-[450px] overflow-hidden cursor-pointer"
     >
       <div 
         style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }}
