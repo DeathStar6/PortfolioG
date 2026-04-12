@@ -20,10 +20,10 @@ export default function BackgroundScene({ scroll }: BackgroundSceneProps) {
       >
         <color attach="background" args={['#000000']} />
         <ambientLight intensity={0.5} />
-        <pointLight position={[20, 20, 20]} intensity={10} color="#6366f1" />
-        <pointLight position={[-20, -20, -20]} intensity={8} color="#f472b6" />
+        <pointLight position={[20, 20, 20]} intensity={10} color="#ffffff" />
+        <pointLight position={[-20, -20, -20]} intensity={5} color="#ffffff" />
         
-        <Atmosphere scroll={scroll} />
+        <NeuralCore scroll={scroll} />
         
         <ProjectNode 
           id={1} 

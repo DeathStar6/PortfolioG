@@ -12,70 +12,62 @@ const getSeededOffset = (seed: number) => {
   return x - Math.floor(x)
 }
 
-// Global utility for position generation to ensure render purity
-const generatePositions = (n: number, range: number) => {
+// High-density spherical distribution for the Neural Core
+const generateSpherePoints = (n: number, radius: number) => {
   const pos = new Float32Array(n * 3)
   for (let i = 0; i < n; i++) {
-    const theta = Math.random() * Math.PI * 2
     const phi = Math.acos(2 * Math.random() - 1)
-    const r = range * Math.pow(Math.random(), 0.7) 
-    pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
-    pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
-    pos[i * 3 + 2] = r * Math.cos(phi)
+    const theta = Math.random() * Math.PI * 2
+    pos[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+    pos[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+    pos[i * 3 + 2] = radius * Math.cos(phi)
   }
   return pos
 }
 
-export function Atmosphere({ scroll }: { scroll: MotionValue<number> }) {
-  const pointsBack = useRef<THREE.Points>(null!)
-  const pointsMid = useRef<THREE.Points>(null!)
-  const pointsFront = useRef<THREE.Points>(null!)
+export function NeuralCore({ scroll }: { scroll: MotionValue<number> }) {
+  const pointsRef = useRef<THREE.Points>(null!)
   const lastScroll = useRef(0)
+  const currentRotation = useRef(0)
 
-  const [pBack, pMid, pFront] = useMemo(() => [
-    generatePositions(600, 150),
-    generatePositions(400, 100),
-    generatePositions(200, 50)
-  ], []) // Dependencies are empty, so this only runs once.
+  const points = useMemo(() => generateSpherePoints(3000, 15), [])
 
   useFrame((state, delta) => {
-    const time = state.clock.getElapsedTime()
     const currentScroll = scroll.get()
     const ds = currentScroll - lastScroll.current
-    const scrollVelocity = delta > 0 ? Math.abs(ds / delta) : 0
+    const velocity = delta > 0 ? Math.abs(ds / delta) : 0
     lastScroll.current = currentScroll
-    
-    const velFactor = 1 + Math.min(scrollVelocity * 0.15, 0.15) 
 
-    pointsBack.current.rotation.y = time * 0.02 * velFactor
-    pointsMid.current.rotation.y = time * 0.04 * velFactor
-    pointsFront.current.rotation.y = time * 0.06 * velFactor
+    // Reaction: Pulse and Rotate
+    const pulse = 1 + Math.sin(state.clock.elapsedTime) * 0.05
+    const velBase = 0.5 + Math.min(velocity * 2, 2)
     
-    pointsBack.current.position.z = Math.sin(time * 0.1) * 2
-    pointsMid.current.position.z = Math.cos(time * 0.15) * 3
+    currentRotation.current += delta * velBase * 0.2
+    
+    pointsRef.current.rotation.y = currentRotation.current
+    pointsRef.current.rotation.x = currentRotation.current * 0.5
+    pointsRef.current.scale.setScalar(pulse)
   })
 
   return (
-    <group>
-      <points ref={pointsBack}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={600} array={pBack} itemSize={3} args={[pBack, 3]} />
-        </bufferGeometry>
-        <pointsMaterial size={0.12} color="#4f46e5" transparent opacity={0.3} blending={THREE.AdditiveBlending} />
-      </points>
-      <points ref={pointsMid}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={400} array={pMid} itemSize={3} args={[pMid, 3]} />
-        </bufferGeometry>
-        <pointsMaterial size={0.18} color="#6366f1" transparent opacity={0.5} blending={THREE.AdditiveBlending} />
-      </points>
-      <points ref={pointsFront}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={200} array={pFront} itemSize={3} args={[pFront, 3]} />
-        </bufferGeometry>
-        <pointsMaterial size={0.25} color="#818cf8" transparent opacity={0.7} blending={THREE.AdditiveBlending} />
-      </points>
-    </group>
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute 
+          attach="attributes-position" 
+          count={3000} 
+          array={points} 
+          itemSize={3} 
+        />
+      </bufferGeometry>
+      <pointsMaterial 
+        size={0.15} 
+        color="#ffffff" 
+        transparent 
+        opacity={0.4} 
+        sizeAttenuation 
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
   )
 }
 
@@ -121,14 +113,14 @@ export function ProjectNode({
       <mesh ref={meshRef} position={position}>
         {geometry}
         <MeshDistortMaterial
-          color="#6366f1"
+          color="#ffffff"
           speed={3}
-          distort={0.3}
+          distort={0.4}
           radius={1}
-          metalness={0.8}
-          roughness={0.2}
+          metalness={0.9}
+          roughness={0.1}
           transparent
-          opacity={0.6}
+          opacity={0.3}
           wireframe={id % 2 === 0}
         />
       </mesh>
