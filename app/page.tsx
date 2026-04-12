@@ -104,7 +104,7 @@ export default function Home() {
   return (
     <main ref={containerRef} className="relative min-h-screen bg-black overflow-x-hidden">
       <NavBar />
-      <BackgroundScene />
+      <BackgroundScene scroll={smoothScroll} />
       
       <motion.div 
         className="neural-progress" 
