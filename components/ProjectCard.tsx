@@ -76,14 +76,12 @@ export default function ProjectCard({ title, description, techStack, github, lin
         }}
         className="glass-card p-10 group relative w-[450px] overflow-hidden cursor-pointer border border-white/5"
       >
-        {/* Holographic Shimmer Layer */}
-        <motion.div 
-          style={{ 
-            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent)",
-            x: useTransform(focalProgress, [0, 1], ["-100%", "200%"])
-          }}
-          className="absolute inset-0 pointer-events-none skew-x-12"
-        />
+        {/* Laser Scan Effect */}
+        <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+          <div className="absolute inset-x-0 h-[1px] bg-white opacity-50 blur-[1px] animate-[holographic_2s_linear_infinite]" 
+               style={{ top: '50%', boxShadow: '0 0 15px rgba(255,255,255,0.8)' }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
 
         <div 
           style={{ transform: "translateZ(80px)", transformStyle: "preserve-3d" }}
