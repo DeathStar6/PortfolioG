@@ -2,7 +2,7 @@
 
 import { MotionValue } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
-import { Atmosphere, CameraRig, ProjectNode } from './SceneComponents'
+import { NeuralCore, CameraRig, ProjectNode } from './SceneComponents'
 
 interface BackgroundSceneProps {
   scroll: MotionValue<number>
