@@ -47,30 +47,37 @@ export default function NavBar() {
       transition={{ delay: 1, duration: 1 }}
       className="fixed top-0 left-0 right-0 z-50 flex justify-center p-6 md:p-8 pointer-events-none"
     >
-      <nav ref={navRef} className="glass-panel px-6 md:px-8 py-3 md:py-4 rounded-xl flex items-center gap-8 md:gap-12 pointer-events-auto border border-white/10 shadow-[0_0_50px_-12px_rgba(255,255,255,0.1)]">
-        <div className="flex items-center gap-6 md:gap-10">
+      <nav ref={navRef} className="tactile-panel px-6 md:px-10 py-3 md:py-4 rounded-full flex items-center gap-8 md:gap-12 pointer-events-auto border-t border-white/10 shadow-2xl">
+        {/* Physical Detail: Brushed Metal Texture */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none rounded-full" />
+        
+        <div className="flex items-center gap-6 md:gap-10 relative z-10">
           {navItems.map((item) => (
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}
-              className="nav-link text-[10px] md:text-xs font-black uppercase tracking-[0.25em] text-zinc-500 hover:text-white transition-colors relative"
+              className="nav-link group flex items-center gap-2 text-[10px] md:text-xs font-black uppercase tracking-[0.25em] text-zinc-500 hover:text-white transition-colors relative"
             >
-              {item}
+              {/* Indicator LED */}
+              <div className="w-1 h-1 rounded-full bg-zinc-800 group-hover:bg-white transition-all shadow-[0_0_8px_rgba(255,255,255,0)] group-hover:shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+              <span className="relative">
+                {item}
+              </span>
             </a>
           ))}
         </div>
         
-        <div className="hidden xs:block w-px h-5 bg-white/5" />
+        <div className="hidden xs:block w-[1px] h-4 bg-white/5 relative z-10" />
         
-        <div className="flex items-center gap-4 md:gap-6">
-          <a href="https://github.com/DeathStar6" target="_blank" className="nav-link text-zinc-500 hover:text-white transition-opacity">
-            <Github size={18} />
+        <div className="flex items-center gap-4 md:gap-6 relative z-10">
+          <a href="https://github.com/DeathStar6" target="_blank" className="nav-link group p-1 text-zinc-500 hover:text-white transition-opacity">
+            <Github size={16} />
           </a>
-          <a href="https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/" target="_blank" className="nav-link text-zinc-500 hover:text-white transition-opacity">
-            <Linkedin size={18} />
+          <a href="https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/" target="_blank" className="nav-link group p-1 text-zinc-500 hover:text-white transition-opacity">
+            <Linkedin size={16} />
           </a>
-          <a href="mailto:subhajitc939@gmail.com" className="nav-link text-zinc-500 hover:text-white transition-opacity">
-            <Mail size={18} />
+          <a href="mailto:subhajitc939@gmail.com" className="nav-link group p-1 text-zinc-500 hover:text-white transition-opacity">
+            <Mail size={16} />
           </a>
         </div>
       </nav>

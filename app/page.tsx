@@ -83,7 +83,7 @@ export default function Home() {
       />
 
 
-      <section className="relative h-[120vh] flex items-center justify-center px-6 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto text-center space-y-12">
           <motion.div
             initial={{ opacity: 0 }}
@@ -96,7 +96,7 @@ export default function Home() {
           </motion.div>
 
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-8xl lg:text-[9.5rem] font-black tracking-tighter leading-[0.85] text-white">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[0.85] text-white">
               <AnimatedTitle text="SUBHAJIT" />
               <div className="text-outline">
                 <AnimatedTitle text="CHATTERJEE" />
@@ -108,7 +108,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-zinc-400 text-xl md:text-2xl max-w-2xl mx-auto font-medium leading-relaxed"
+            className="text-zinc-400 text-lg md:text-xl max-w-xl mx-auto font-medium leading-relaxed"
           >
             Engineering <span className="text-white">Intelligent Systems</span> with AI 
             and scalable web architectures. Designing the future of agentic products.
@@ -124,15 +124,15 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               href="#projects" 
-              className="premium-button px-10 py-5 text-lg"
+              className="premium-button px-8 py-4 text-base"
             >
-              Examine Work <Rocket size={20} />
+              Examine Work <Rocket size={18} />
             </motion.a>
             <motion.a 
               whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
               whileTap={{ scale: 0.95 }}
               href="#contact" 
-              className="premium-button-outline px-10 py-5 text-lg"
+              className="premium-button-outline px-8 py-4 text-base"
             >
               Contact Agent
             </motion.a>
@@ -153,7 +153,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      <section id="about" className="min-h-screen py-60 px-6 relative flex items-center">
+      <section id="about" className="min-h-screen py-24 px-6 relative flex items-center">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -162,12 +162,12 @@ export default function Home() {
           >
             <motion.h2 
               style={{ y: useTransform(smoothScroll, [0, 0.2], [0, -100]) }}
-              className="text-6xl md:text-8xl font-black text-white tracking-tighter leading-none"
+              className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none"
             >
               THE_INTELLIGENT_<br />
               <span className="text-indigo-500/50 italic">APPROACH</span>
             </motion.h2>
-            <p className="text-2xl md:text-4xl text-zinc-400 font-medium leading-tight max-w-2xl">
+            <p className="text-xl md:text-2xl text-zinc-400 font-medium leading-tight max-w-xl">
               I specialize in bridging the gap between <span className="text-white">complex AI research</span> and 
               <span className="text-white"> production-ready systems</span>. 
               My focus is on RAG, LLM integration, and high-performance Web Architectures.
@@ -176,54 +176,51 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="experience" className="min-h-screen py-60 px-6 bg-zinc-950/20 flex items-center">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="grid lg:grid-cols-2 gap-24 items-center">
-            <div className="space-y-12">
-              <motion.h2 
-                style={{ x: useTransform(smoothScroll, [0.1, 0.3], [-50, 0]) }}
-                className="text-xs font-bold tracking-[0.5em] text-indigo-500 uppercase"
-              >
-                Professional Timeline
-              </motion.h2>
-              <div className="space-y-20">
-                <motion.div 
-                   initial={{ opacity: 0, x: -30 }}
-                   whileInView={{ opacity: 1, x: 0 }}
-                   className="group relative pl-12 border-l border-zinc-800"
-                >
-                  <div className="absolute -left-1.5 top-0 w-3 h-3 rounded-full bg-indigo-500 group-hover:scale-150 transition-transform" />
-                  <h3 className="text-4xl font-bold text-white mb-2 tracking-tighter">Frontend Developer Intern</h3>
-                  <p className="text-indigo-500 text-lg font-black mb-6 uppercase">Creatiq Media | 2025</p>
-                  <div className="text-zinc-400 text-lg space-y-4 max-w-lg font-medium opacity-60 group-hover:opacity-100 transition-opacity">
-                    <p>Designed and scaled responsive UI components for high-traffic media platforms.</p>
-                    <p>Integrated complex REST architectures with React.js, focusing on render performance and UX flow.</p>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
+      <section id="experience" className="min-h-[70vh] py-24 px-6 bg-zinc-950/20 flex items-center">
+        <div className="max-w-4xl mx-auto w-full">
+          <div className="space-y-16">
+            <motion.h2 
+              style={{ x: useTransform(smoothScroll, [0.1, 0.3], [-50, 0]) }}
+              className="text-xs font-bold tracking-[0.5em] text-indigo-500 uppercase flex items-center gap-4"
+            >
+              <span className="w-12 h-px bg-indigo-500/30" />
+              Professional Timeline
+            </motion.h2>
 
-            <div className="space-y-8">
-              {[
-                { year: "2025", role: "Frontend Developer Intern", co: "Creatiq Media", detail: "Scaled responsive UI components for high-traffic media platforms; 40% reduction in re-render cycles via memoization." },
-                { year: "2024", role: "CivicSync AI", co: "Side Project", detail: "Built LLM-powered civic triage system (Gemini 1.5 Flash) — 60% faster issue routing, 1500+ test cases." },
-                { year: "2023", role: "LLM Policy Query System", co: "Research", detail: "RAG pipeline on legal documents with semantic search; sub-1.5s response at 95th percentile." },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.year}
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.12, ease: [0.16, 1, 0.3, 1], duration: 0.8 }}
-                  className="flex gap-8 group"
-                >
-                  <span className="font-terminal text-xs text-zinc-600 pt-1 w-10 shrink-0">{item.year}</span>
-                  <div className="border-t border-white/5 pt-4 flex-1 group-hover:border-white/15 transition-colors">
-                    <p className="text-xs font-black uppercase tracking-[0.25em] text-zinc-500 mb-1">{item.co}</p>
-                    <h4 className="text-xl font-black text-white tracking-tight mb-3">{item.role}</h4>
-                    <p className="text-sm text-zinc-500 leading-relaxed font-medium">{item.detail}</p>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="relative pl-12 border-l border-white/5 space-y-12">
+              <motion.div 
+                 initial={{ opacity: 0, x: -30 }}
+                 whileInView={{ opacity: 1, x: 0 }}
+                 viewport={{ once: true }}
+                 className="group relative"
+              >
+                <div className="absolute -left-[3.4rem] top-0 w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] group-hover:scale-150 transition-transform" />
+                
+                <div className="flex flex-col md:flex-row md:items-baseline gap-2 mb-6">
+                  <h3 className="text-4xl md:text-5xl font-black text-white tracking-tighter">Frontend Developer Intern</h3>
+                  <span className="text-indigo-500/50 font-mono text-sm ml-auto md:ml-0 md:pl-4">2025 // PRESENT</span>
+                </div>
+
+                <p className="text-indigo-500 text-lg font-black mb-8 uppercase tracking-widest">Creatiq Media</p>
+                
+                <div className="text-zinc-400 text-lg space-y-6 max-w-2xl font-medium leading-relaxed">
+                  <p className="opacity-80 group-hover:opacity-100 transition-opacity">
+                    Designing and scaling responsive UI components for high-traffic media platforms. 
+                    Specializing in high-performance React architectures and cinematic WebGL integrations.
+                  </p>
+                  
+                  <ul className="space-y-3 text-sm font-mono opacity-60">
+                    <li className="flex items-center gap-3">
+                      <span className="w-1.5 h-1.5 bg-indigo-500/50 rounded-full" />
+                      Integrated complex REST architectures with React.js
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <span className="w-1.5 h-1.5 bg-indigo-500/50 rounded-full" />
+                      Optimized render performance and UX flow for scale
+                    </li>
+                  </ul>
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -278,22 +275,22 @@ export default function Home() {
 
       <Achievements />
       
-      <section id="contact" className="py-60 px-6 relative overflow-hidden">
+      <section id="contact" className="py-24 px-6 relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center space-y-24">
           <div className="space-y-6">
             <motion.h2 
               style={{ x: useTransform(smoothScroll, [0.8, 1], [-200, 200]) }}
-              className="text-[15vw] font-black text-white/5 absolute -top-20 left-0 tracking-tighter pointer-events-none uppercase"
+              className="text-[8vw] font-black text-white/5 absolute -top-10 left-0 tracking-tighter pointer-events-none uppercase"
             >
               CONNECT
             </motion.h2>
             <motion.h3 
               style={{ scale: useTransform(smoothScroll, [0.85, 0.95], [0.8, 1]) }}
-              className="text-6xl md:text-8xl font-black text-white tracking-tighter"
+              className="text-4xl md:text-6xl font-black text-white tracking-tighter"
             >
               LET&apos;S WORK
             </motion.h3>
-            <p className="text-xl text-zinc-400 font-medium max-w-lg mx-auto">Open to ambitious AI engineering roles and high-scale technical systems architectures.</p>
+            <p className="text-lg text-zinc-400 font-medium max-w-md mx-auto">Open to ambitious AI engineering roles and high-scale technical systems architectures.</p>
           </div>
           
           <ContactForm />

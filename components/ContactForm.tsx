@@ -42,60 +42,66 @@ export default function ContactForm() {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="max-w-2xl mx-auto space-y-8"
+      className="max-w-2xl mx-auto space-y-10"
     >
       <div className="grid md:grid-cols-2 gap-8">
         <div className="space-y-3">
           <label
             htmlFor="contact-name"
-            className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500"
+            className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 ml-1"
           >
-            Name →
+            Terminal User //
           </label>
-          <input
-            id="contact-name"
-            name="name"
-            required
-            type="text"
-            autoComplete="name"
-            className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all font-terminal placeholder:text-zinc-700"
-            placeholder="Your name"
-          />
+          <div className="recessed-slot rounded-sm overflow-hidden">
+            <input
+              id="contact-name"
+              name="name"
+              required
+              type="text"
+              autoComplete="name"
+              className="w-full bg-transparent px-4 py-3 text-white focus:outline-none transition-all font-terminal placeholder:text-zinc-700"
+              placeholder="Identification required"
+            />
+          </div>
         </div>
         <div className="space-y-3">
           <label
             htmlFor="contact-email"
-            className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500"
+            className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 ml-1"
           >
-            Email →
+            Access Port //
           </label>
-          <input
-            id="contact-email"
-            name="email"
-            required
-            type="email"
-            autoComplete="email"
-            className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all font-terminal placeholder:text-zinc-700"
-            placeholder="your@email.com"
-          />
+          <div className="recessed-slot rounded-sm overflow-hidden">
+            <input
+              id="contact-email"
+              name="email"
+              required
+              type="email"
+              autoComplete="email"
+              className="w-full bg-transparent px-4 py-3 text-white focus:outline-none transition-all font-terminal placeholder:text-zinc-700"
+              placeholder="protocol@node.com"
+            />
+          </div>
         </div>
       </div>
 
       <div className="space-y-3">
         <label
           htmlFor="contact-message"
-          className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500"
+          className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 ml-1"
         >
-          Message →
+          Data Payload //
         </label>
-        <textarea
-          id="contact-message"
-          name="message"
-          required
-          rows={4}
-          className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-white focus:outline-none focus:border-white transition-all resize-none font-terminal placeholder:text-zinc-700"
-          placeholder="Tell me about the project or role..."
-        />
+        <div className="recessed-slot rounded-sm overflow-hidden">
+          <textarea
+            id="contact-message"
+            name="message"
+            required
+            rows={4}
+            className="w-full bg-transparent px-4 py-3 text-white focus:outline-none transition-all resize-none font-terminal placeholder:text-zinc-700"
+            placeholder="Signal content..."
+          />
+        </div>
       </div>
 
       {/* Status feedback */}
@@ -106,20 +112,22 @@ export default function ContactForm() {
           className="flex items-center gap-2 text-xs text-red-400 font-mono"
         >
           <AlertCircle size={14} />
-          Something went wrong. Try emailing subhajitc939@gmail.com directly.
+          Uplink failed. Local bypass: subhajitc939@gmail.com
         </motion.p>
       )}
 
       <button
         type="submit"
         disabled={status === 'sending' || status === 'sent'}
-        className="relative w-full py-4 text-black font-black uppercase tracking-[0.3em] text-xs transition-all disabled:opacity-60 overflow-hidden flex items-center justify-center gap-3"
-        style={{ background: 'var(--foreground)' }}
+        className="tactile-button relative w-full py-4 text-white font-black uppercase tracking-[0.4em] text-xs transition-all disabled:opacity-60 overflow-hidden flex items-center justify-center gap-3 rounded-sm group"
       >
+        {/* Button Inner Detail */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+        
         {status === 'sent' ? (
           <>
-            <CheckCircle size={16} />
-            Message Sent
+            <CheckCircle size={16} className="text-green-500" />
+            Transfer Complete
           </>
         ) : status === 'sending' ? (
           <>
@@ -127,14 +135,14 @@ export default function ContactForm() {
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
             >
-              Sending
+              Uplinking
             </motion.span>
             <span className="font-terminal">...</span>
           </>
         ) : (
           <>
-            Send Message
-            <Send size={14} />
+            Execute Transmission
+            <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
           </>
         )}
       </button>

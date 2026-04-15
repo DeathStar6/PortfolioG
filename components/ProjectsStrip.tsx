@@ -38,7 +38,7 @@ const projects = [
 
 export default function ProjectsStrip() {
   return (
-    <section className="py-32 px-6 relative z-10" id="projects">
+    <section className="py-24 px-6 relative z-10" id="projects">
       <div className="max-w-7xl mx-auto space-y-24">
         {/* Section Header */}
         <div className="text-center space-y-4">
@@ -54,7 +54,7 @@ export default function ProjectsStrip() {
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             className="text-6xl md:text-8xl font-black text-white tracking-tighter"
+             className="text-4xl md:text-6xl font-black text-white tracking-tighter"
           >
              PROJECTS
           </motion.h2>
@@ -94,7 +94,7 @@ export default function ProjectsStrip() {
       </div>
 
       {/* Background Decor */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none opacity-[0.03] select-none text-[20vw] font-black text-white overflow-hidden flex items-center justify-center whitespace-nowrap">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none opacity-[0.03] select-none text-[10vw] font-black text-white overflow-hidden flex items-center justify-center whitespace-nowrap">
         010101 // SYSTEMS // 010101
       </div>
     </section>

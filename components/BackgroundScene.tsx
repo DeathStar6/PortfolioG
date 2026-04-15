@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import { MotionValue } from 'framer-motion'
 import { Canvas } from '@react-three/fiber'
-import { CameraRig, ProjectNode } from './SceneComponents'
-import SimpleWorkingParticles from './SimpleWorkingParticles'
+import ParticleMorphEngine from './ParticleMorphEngine'
 
 interface BackgroundSceneProps {
   scroll: MotionValue<number>
@@ -28,65 +27,45 @@ export default function BackgroundScene({ scroll }: BackgroundSceneProps) {
   if (!scroll) return null
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden" style={{ background: 'var(--background)' }}>
+    <div className="fixed inset-0 -z-0 overflow-hidden" style={{ background: 'var(--background)' }}>
       {/* CSS fallback — always visible, gives depth even if WebGL is absent */}
       <CSSFallback />
 
-      {/* Noise texture overlay for surface texture */}
+      {/* WebGL canvas — Particle Morph Engine (Top layer of background) */}
+      {!webglFailed && (
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 60 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: true, alpha: true }}
+          style={{ 
+            width: '100%', 
+            height: '100%', 
+            position: 'absolute', 
+            inset: 0,
+            zIndex: 1 // Above the fallback, but still inside the fixed container which is at -z
+          }}
+          onCreated={({ gl }) => {
+            gl.domElement.addEventListener('webglcontextlost', () => {
+              setWebglFailed(true)
+            })
+          }}
+        >
+          <ParticleMorphEngine scroll={scroll} />
+        </Canvas>
+      )}
+
+      {/* CSS fallback — visible behind WebGL */}
+      <CSSFallback />
+
+      {/* Noise texture overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        className="absolute inset-0 pointer-events-none opacity-[0.015] z-10"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           backgroundRepeat: 'repeat',
           backgroundSize: '128px 128px',
         }}
       />
-
-      {/* WebGL canvas — hidden if it errors */}
-      {!webglFailed && (
-        <Canvas
-          camera={{ position: [0, 0, 30], fov: 75 }}
-          dpr={[1, 1.5]}
-          gl={{ antialias: true, alpha: true }}
-          style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}
-          onCreated={({ gl }) => {
-            // If context is lost after creation, fall back to CSS
-            gl.domElement.addEventListener('webglcontextlost', () => {
-              setWebglFailed(true)
-            })
-          }}
-        >
-          <ambientLight intensity={1.0} />
-          <pointLight position={[20, 20, 20]} intensity={10} color="#ffffff" />
-          <pointLight position={[-20, -20, -20]} intensity={5} color="#ffffff" />
-
-          <SimpleWorkingParticles scroll={scroll} />
-
-          <ProjectNode
-            id={1}
-            position={[-10, 0, -5]}
-            scroll={scroll}
-            threshold={0.33}
-          />
-
-          <ProjectNode
-            id={2}
-            position={[10, 0, -10]}
-            scroll={scroll}
-            threshold={0.66}
-          />
-
-          <ProjectNode
-            id={0}
-            position={[0, 0, 0]}
-            scroll={scroll}
-            threshold={0.0}
-            geometry={<sphereGeometry args={[8, 32, 32]} />}
-          />
-
-          <CameraRig scroll={scroll} />
-        </Canvas>
-      )}
     </div>
   )
 }

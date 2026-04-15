@@ -54,14 +54,26 @@ export default function ProjectCard({ title, description, techStack, github, lin
           rotateY, 
           transformStyle: "preserve-3d",
         }}
-        className="glass-card p-10 group relative w-full lg:max-w-md aspect-[4/3] flex flex-col justify-between overflow-hidden cursor-pointer border border-white/5"
+        className="tactile-panel p-10 group relative w-full lg:max-w-md aspect-[4/3] flex flex-col justify-between overflow-hidden cursor-pointer border border-white/10"
       >
-        {/* Laser Scan Effect */}
-        <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-          <div className="absolute inset-x-0 h-[1px] bg-white opacity-50 blur-[1px] animate-[holographic_2s_linear_infinite]" 
-               style={{ top: '50%', boxShadow: '0 0 15px rgba(255,255,255,0.8)' }} />
-          <div className="absolute inset-0 bg-gradient-to-t from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Physical Detail: Corner Screws */}
+        <div className="absolute top-3 left-3 w-2 h-2 rounded-full bg-zinc-700 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.8),1px_1px_0px_rgba(255,255,255,0.1)] flex items-center justify-center">
+          <div className="w-[1px] h-1.5 bg-zinc-900 rotate-45" />
         </div>
+        <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-zinc-700 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.8),1px_1px_0px_rgba(255,255,255,0.1)] flex items-center justify-center">
+          <div className="w-[1px] h-1.5 bg-zinc-900 -rotate-45" />
+        </div>
+        <div className="absolute bottom-3 left-3 w-2 h-2 rounded-full bg-zinc-700 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.8),1px_1px_0px_rgba(255,255,255,0.1)] flex items-center justify-center">
+          <div className="w-[1px] h-1.5 bg-zinc-900 -rotate-45" />
+        </div>
+        <div className="absolute bottom-3 right-3 w-2 h-2 rounded-full bg-zinc-700 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.8),1px_1px_0px_rgba(255,255,255,0.1)] flex items-center justify-center">
+          <div className="w-[1px] h-1.5 bg-zinc-900 rotate-45" />
+        </div>
+
+        {/* Mechanical Scanning Effect */}
+        <div className="absolute inset-x-0 h-[2px] bg-white opacity-[0.05] group-hover:opacity-[0.15] blur-[1px] top-0 group-hover:animate-[h holographic_3s_linear_infinite] pointer-events-none" />
+        
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-50 pointer-events-none" />
 
         <div 
           style={{ transform: "translateZ(80px)", transformStyle: "preserve-3d" }}
@@ -83,7 +95,7 @@ export default function ProjectCard({ title, description, techStack, github, lin
           <div>
             <div className="flex flex-wrap gap-2 mb-8">
               {techStack.map((tech) => (
-                <span key={tech} className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-600 bg-white/5 border border-white/5 px-2.5 py-1 rounded">
+                <span key={tech} className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 bg-black/40 border border-white/5 px-2.5 py-1 rounded shadow-inner">
                   {tech}
                 </span>
               ))}
