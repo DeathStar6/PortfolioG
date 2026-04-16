@@ -20,6 +20,12 @@ import ProjectsStrip from '@/components/ProjectsStrip'
 import NavBar from '@/components/NavBar'
 import SkillBadge from '@/components/SkillBadge'
 import Achievements from '@/components/Achievements'
+import DecryptedText from "@/components/DecryptedText"
+import { useMagnetic } from "@/hooks/useMagnetic"
+import FocusMode from "@/components/FocusMode"
+import dynamic from "next/dynamic"
+
+const RobotModel = dynamic(() => import('@/components/RobotModel'), { ssr: false })
 
 const AnimatedTitle = ({ text }: { text: string }) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -63,6 +69,9 @@ export default function Home() {
     restDelta: 0.001
   })
 
+  const magneticWork = useMagnetic(0.25)
+  const magneticContact = useMagnetic(0.25)
+
   const skills = [
     { category: "Programming", items: ["C", "C++", "Python", "JavaScript", "SQL"], icon: <Terminal size={18} /> },
     { category: "AI & Machine Learning", items: ["TensorFlow", "PyTorch", "NLP", "RAG", "LLM Integration", "Prompt Engineering"], icon: <Cpu size={18} /> },
@@ -77,13 +86,17 @@ export default function Home() {
       
       <BackgroundScene scroll={smoothScroll} />
       
+      {/* Root-level RobotModel to ensure proper mix-blend-screen with background particles */}
+      <RobotModel />
+      <FocusMode />
+      
       <motion.div 
         className="neural-progress" 
         style={{ scaleX: smoothScroll }} 
       />
 
-
-      <section className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
+      <div className="ui-layer">
+        <section className="relative min-h-screen flex items-center justify-center px-6">
         <div className="max-w-5xl mx-auto text-center space-y-12">
           <motion.div
             initial={{ opacity: 0 }}
@@ -97,9 +110,9 @@ export default function Home() {
 
           <div className="space-y-4">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[0.85] text-white">
-              <AnimatedTitle text="SUBHAJIT" />
+              <DecryptedText text="SUBHAJIT" as="div" />
               <div className="text-outline">
-                <AnimatedTitle text="CHATTERJEE" />
+                <DecryptedText text="CHATTERJEE" as="div" />
               </div>
             </h1>
           </div>
@@ -118,19 +131,19 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center justify-center gap-6 pt-6"
+            className="flex flex-wrap items-center justify-center gap-6 pt-6 relative z-10"
           >
             <motion.a 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              {...magneticWork}
+              style={{ x: magneticWork.x, y: magneticWork.y }}
               href="#projects" 
               className="premium-button px-8 py-4 text-base"
             >
               Examine Work <Rocket size={18} />
             </motion.a>
             <motion.a 
-              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
-              whileTap={{ scale: 0.95 }}
+              {...magneticContact}
+              style={{ x: magneticContact.x, y: magneticContact.y }}
               href="#contact" 
               className="premium-button-outline px-8 py-4 text-base"
             >
@@ -184,7 +197,7 @@ export default function Home() {
               className="text-xs font-bold tracking-[0.5em] text-indigo-500 uppercase flex items-center gap-4"
             >
               <span className="w-12 h-px bg-indigo-500/30" />
-              Professional Timeline
+              <DecryptedText text="Professional Timeline" />
             </motion.h2>
 
             <div className="relative pl-12 border-l border-white/5 space-y-12">
@@ -237,7 +250,7 @@ export default function Home() {
             className="mb-20"
           >
             <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4">
-              CAPABILITIES_<span className="text-zinc-500 text-2xl font-mono tracking-normal ml-4">[ SYSTEM_AUDIT ]</span>
+              <DecryptedText text="CAPABILITIES" />_<span className="text-zinc-500 text-2xl font-mono tracking-normal ml-4">[ SYSTEM_AUDIT ]</span>
             </h2>
           </motion.div>
 
@@ -288,7 +301,7 @@ export default function Home() {
               style={{ scale: useTransform(smoothScroll, [0.85, 0.95], [0.8, 1]) }}
               className="text-4xl md:text-6xl font-black text-white tracking-tighter"
             >
-              LET&apos;S WORK
+              <DecryptedText text="LET'S WORK" />
             </motion.h3>
             <p className="text-lg text-zinc-400 font-medium max-w-md mx-auto">Open to ambitious AI engineering roles and high-scale technical systems architectures.</p>
           </div>
@@ -318,6 +331,7 @@ export default function Home() {
           ))}
         </div>
       </footer>
+      </div>
     </main>
   )
 }

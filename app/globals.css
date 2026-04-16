@@ -243,3 +243,82 @@ h1, h2, h3, h4 {
 .font-terminal {
   font-family: var(--font-mono), monospace;
 }
+
+/* ========================================================================
+   FOCUS MODE (CINEMATIC FLASHLIGHT)
+   ======================================================================== */
+.flashlight-beam {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50; /* Over particles, under UI */
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: conic-gradient(from calc(var(--beam-angle, 0) * 1deg - 35deg) at 78vw 45vh,
+      transparent 0deg,
+      transparent 10deg,
+      rgba(99, 102, 241, 0.20) 20deg,
+      rgba(99, 102, 241, 0.20) 50deg,
+      transparent 60deg,
+      transparent 360deg);
+  -webkit-mask-image: radial-gradient(ellipse at 78vw 45vh, transparent 0%, transparent 4%, black 12%);
+  mask-image: radial-gradient(ellipse at 78vw 45vh, transparent 0%, transparent 4%, black 12%);
+}
+
+body.focus-mode-active .flashlight-beam {
+  opacity: 1;
+}
+
+.ui-layer {
+  transition: mask-image 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.focus-mode-active .ui-layer {
+  /* Using dynamic var(--scroll-y) offsets to completely bypass Chrome's rendering bug with mask-attachment: fixed */
+  -webkit-mask-image: conic-gradient(from calc(var(--beam-angle, 0) * 1deg - 35deg) at 78vw calc(45vh + var(--scroll-y, 0px)),
+      rgba(0, 0, 0, 0.05) 0deg,
+      black 15deg,
+      black 55deg,
+      rgba(0, 0, 0, 0.05) 70deg,
+      rgba(0, 0, 0, 0.05) 360deg);
+  mask-image: conic-gradient(from calc(var(--beam-angle, 0) * 1deg - 35deg) at 78vw calc(45vh + var(--scroll-y, 0px)),
+      rgba(0, 0, 0, 0.05) 0deg,
+      black 15deg,
+      black 55deg,
+      rgba(0, 0, 0, 0.05) 70deg,
+      rgba(0, 0, 0, 0.05) 360deg);
+}
+
+.focus-mode-btn {
+  position: fixed;
+  bottom: 5rem;
+  left: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1.25rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  z-index: 9999;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 24px -1px rgba(0,0,0,0.5);
+}
+
+.focus-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+body.focus-mode-active .focus-mode-btn {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.15), 0 4px 24px -1px rgba(0,0,0,0.5);
+  background: rgba(99, 102, 241, 0.05);
+}

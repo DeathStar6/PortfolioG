@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 }
 
 import CustomCursor from "@/components/CustomCursor"
+import WorkLight from "@/components/WorkLight"
 
 export default function RootLayout({
   children,
@@ -29,9 +30,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${geist.variable} ${azeretMono.variable} antialiased selection:bg-white/20 cursor-none`}>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <body className={`${geist.variable} ${azeretMono.variable} antialiased selection:bg-white/20 cursor-none`} suppressHydrationWarning>
         <CustomCursor />
+        <WorkLight />
         <SmoothScroll>
           {children}
         </SmoothScroll>
