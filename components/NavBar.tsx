@@ -56,7 +56,7 @@ export default function NavBar() {
             <a 
               key={item} 
               href={`#${item.toLowerCase()}`}
-              className="nav-link shrink-0 group flex items-center gap-2 text-[10px] md:text-xs font-black uppercase tracking-[0.25em] text-zinc-500 hover:text-white transition-colors relative py-3 md:py-1 px-1 touch-manipulation"
+              className="nav-link shrink-0 group flex items-center gap-2 text-[10px] md:text-xs font-black uppercase tracking-[0.25em] text-zinc-400 hover:text-white active:scale-90 transition-all relative py-3 md:py-1 px-1 touch-manipulation"
             >
               {/* Indicator LED */}
               <div className="w-1 h-1 rounded-full bg-zinc-800 group-hover:bg-white transition-all shadow-[0_0_8px_rgba(255,255,255,0)] group-hover:shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
@@ -70,13 +70,13 @@ export default function NavBar() {
         <div className="hidden xs:block w-[1px] h-4 bg-white/5 relative z-10" />
         
         <div className="flex items-center gap-4 md:gap-6 relative z-10">
-          <a href="https://github.com/DeathStar6" target="_blank" className="nav-link group p-3 md:p-1 text-zinc-500 hover:text-white transition-opacity touch-manipulation">
+          <a href="https://github.com/DeathStar6" target="_blank" className="nav-link group p-3 md:p-1 text-zinc-400 hover:text-white active:scale-90 transition-all touch-manipulation">
             <Github size={16} />
           </a>
-          <a href="https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/" target="_blank" className="nav-link group p-3 md:p-1 text-zinc-500 hover:text-white transition-opacity touch-manipulation">
+          <a href="https://www.linkedin.com/in/subhajit-chatterjee-a2b952222/" target="_blank" className="nav-link group p-3 md:p-1 text-zinc-400 hover:text-white active:scale-90 transition-all touch-manipulation">
             <Linkedin size={16} />
           </a>
-          <a href="mailto:subhajitc939@gmail.com" className="nav-link group p-3 md:p-1 text-zinc-500 hover:text-white transition-opacity touch-manipulation">
+          <a href="mailto:subhajitc939@gmail.com" className="nav-link group p-3 md:p-1 text-zinc-400 hover:text-white active:scale-90 transition-all touch-manipulation">
             <Mail size={16} />
           </a>
         </div>

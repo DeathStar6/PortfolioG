@@ -9,30 +9,35 @@ const projects = [
     description: "Intelligence-driven civic management system using LLMs (Gemini 1.5 Flash) for automated triage. Classified issues and detected emergencies with 60% faster triage speed.",
     techStack: ["Node.js", "Express", "MongoDB", "Gemini AI", "Leaflet.js"],
     github: "https://github.com/DeathStar6",
+    coverImage: "/projects/civicsync_cover.png"
   },
   {
     title: "LLM Policy Query System",
     description: "RAG-based system for extracting structured answers from policy/legal documents. Features semantic search and <1.5s response time.",
     techStack: ["Next.js", "Python", "LangChain", "Hugging Face", "RAG"],
     github: "https://github.com/DeathStar6",
+    coverImage: "/projects/policy_llm_cover.png"
   },
   {
     title: "University MERN Platform",
     description: "Full-stack interactive landing page for student data flow. Optimized for performance with reusable components and secure authentication.",
     techStack: ["React", "Node.js", "Express", "MongoDB"],
     github: "https://github.com/DeathStar6",
+    coverImage: "/projects/mern_platform_cover.png"
   },
   {
     title: "Grade Manager System",
     description: "CLI + Web system for academic management with GPA analytics, CSV support, and automated backups using a custom Python server.",
     techStack: ["Python", "JSON", "Bootstrap", "Custom Server"],
     github: "https://github.com/DeathStar6",
+    coverImage: "/projects/grade_manager_cover.png"
   },
   {
     title: "Fake News Detection",
     description: "ML pipeline classifying real vs fake news using text preprocessing. Trained Logistic Regression and Naive Bayes models with improved accuracy.",
     techStack: ["Python", "Scikit", "NLP", "TF-IDF"],
     github: "https://github.com/DeathStar6",
+    coverImage: "/projects/fake_news_cover.png"
   },
 ]
 

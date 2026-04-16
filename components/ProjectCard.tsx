@@ -9,10 +9,11 @@ interface ProjectCardProps {
   techStack: string[]
   github?: string
   link?: string
+  coverImage?: string
   index: number
 }
 
-export default function ProjectCard({ title, description, techStack, github, link, index }: ProjectCardProps) {
+export default function ProjectCard({ title, description, techStack, github, link, coverImage, index }: ProjectCardProps) {
   // 1. Hover Physics
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -69,6 +70,14 @@ export default function ProjectCard({ title, description, techStack, github, lin
         <div className="absolute bottom-3 right-3 w-2 h-2 rounded-full bg-zinc-700 shadow-[inset_1px_1px_2px_rgba(0,0,0,0.8),1px_1px_0px_rgba(255,255,255,0.1)] flex items-center justify-center">
           <div className="w-[1px] h-1.5 bg-zinc-900 rotate-45" />
         </div>
+
+        {/* Background Cover Image Layer */}
+        {coverImage && (
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.15] group-hover:opacity-[0.4] transition-opacity duration-700 mix-blend-screen scale-[1.05]"
+            style={{ backgroundImage: `url(${coverImage})`, transform: "translateZ(-10px)" }} 
+          />
+        )}
 
         {/* Mechanical Scanning Effect */}
         <div className="absolute inset-x-0 h-[2px] bg-white opacity-[0.05] group-hover:opacity-[0.15] blur-[1px] top-0 group-hover:animate-[h holographic_3s_linear_infinite] pointer-events-none" />

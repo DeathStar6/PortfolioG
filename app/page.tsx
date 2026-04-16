@@ -97,7 +97,10 @@ export default function Home() {
 
       <div className="ui-layer">
         <section className="relative min-h-[100dvh] flex items-center justify-center px-4 md:px-6">
-        <div className="max-w-5xl mx-auto text-center space-y-12">
+          {/* Radial scrim to maintain high text contrast against 3D particles */}
+          <div className="absolute inset-0 bg-black/60 pointer-events-none -z-10 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
+          
+          <div className="max-w-5xl mx-auto text-center space-y-12">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -250,7 +253,7 @@ export default function Home() {
             className="mb-20"
           >
             <h2 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-4">
-              <DecryptedText text="CAPABILITIES" />_<span className="text-zinc-500 text-xl md:text-2xl font-mono tracking-normal ml-2 md:ml-4 flex flex-col md:inline">[ SYSTEM_AUDIT ]</span>
+              <DecryptedText text="CAPABILITIES" />_<span className="text-zinc-400 text-xl md:text-2xl font-mono tracking-normal ml-2 md:ml-4 flex flex-col md:inline">[ SYSTEM_AUDIT ]</span>
             </h2>
           </motion.div>
 
@@ -268,7 +271,7 @@ export default function Home() {
                   {skill.icon}
                 </div>
                 
-                <h3 className="text-[10px] font-black uppercase tracking-[0.35em] text-zinc-500 mb-8 border-b border-white/10 pb-4 group-hover:text-white transition-colors">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.35em] text-zinc-400 mb-8 border-b border-white/10 pb-4 group-hover:text-white transition-colors">
                   {skill.category}
                 </h3>
                 
