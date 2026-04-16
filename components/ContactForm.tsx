@@ -44,7 +44,7 @@ export default function ContactForm() {
       viewport={{ once: true }}
       className="max-w-2xl mx-auto space-y-10"
     >
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <div className="space-y-3">
           <label
             htmlFor="contact-name"

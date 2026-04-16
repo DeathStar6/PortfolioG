@@ -43,7 +43,7 @@ const certificates = [
 
 export default function Achievements() {
   return (
-    <section id="achievements" className="py-40 px-6 relative overflow-hidden bg-zinc-950/20">
+    <section id="achievements" className="py-20 md:py-40 px-4 md:px-6 relative overflow-hidden bg-zinc-950/20">
       <div className="max-w-7xl mx-auto space-y-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="space-y-4">
@@ -51,7 +51,7 @@ export default function Achievements() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="text-7xl md:text-9xl font-black text-white tracking-tighter"
+              className="text-5xl sm:text-7xl md:text-9xl font-black text-white tracking-tighter"
             >
               ACHIEVEMENTS
             </motion.h2>

@@ -18,6 +18,41 @@ export default function RobotModel() {
     return () => observer.disconnect()
   }, [])
 
+  // Make the robot look around on mobile by simulating mouse moves on scroll
+  useEffect(() => {
+    // Check if it's a touch device (no actual mouse to look at)
+    const isTouchDevice = typeof window !== 'undefined' && 
+      (window.matchMedia('(hover: none) and (pointer: coarse)').matches || 'ontouchstart' in window)
+
+    if (!isTouchDevice) return
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const maxScroll = document.body.scrollHeight - window.innerHeight
+      // Prevent division by zero if page is small
+      if (maxScroll <= 0) return
+
+      const scrollPercent = Math.max(0, Math.min(1, scrollY / maxScroll))
+      
+      // Simulate mouse moving from top to bottom as user scrolls down
+      // X maps to a slight sine wave to give it organic side-to-side head movement
+      const simulatedY = window.innerHeight * scrollPercent
+      const simulatedX = window.innerWidth * (0.5 + Math.sin(scrollPercent * Math.PI) * 0.3)
+
+      const ev = new MouseEvent('mousemove', {
+        clientX: simulatedX,
+        clientY: simulatedY,
+        bubbles: true,
+      })
+      window.dispatchEvent(ev)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    // Fire once to initialize
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const onSplineLoad = () => {
     setIsLoaded(true)
   }
@@ -29,7 +64,7 @@ export default function RobotModel() {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: isLoaded ? 1 : 0, scale: isLoaded ? 1 : 0.8 }}
       transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-1/2 -right-[10%] md:-right-[2%] -translate-y-[40%] w-[40vw] h-[70vh] pointer-events-none z-[2] hidden lg:block"
+      className="fixed bottom-0 lg:bottom-auto lg:top-1/2 left-0 lg:left-auto lg:-right-[2%] lg:-translate-y-[40%] w-[100vw] lg:w-[40vw] h-[50vh] lg:h-[70vh] pointer-events-none z-[0] lg:z-[2]"
     >
       <div 
         className="w-full h-full relative" 

@@ -38,7 +38,7 @@ const projects = [
 
 export default function ProjectsStrip() {
   return (
-    <section className="py-24 px-6 relative z-10" id="projects">
+    <section className="py-16 md:py-24 px-4 md:px-6 relative z-10" id="projects">
       <div className="max-w-7xl mx-auto space-y-24">
         {/* Section Header */}
         <div className="text-center space-y-4">

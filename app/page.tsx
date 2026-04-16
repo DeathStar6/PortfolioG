@@ -81,7 +81,7 @@ export default function Home() {
   ]
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
+    <main className="relative min-h-[100dvh] overflow-x-hidden">
       <NavBar />
       
       <BackgroundScene scroll={smoothScroll} />
@@ -96,7 +96,7 @@ export default function Home() {
       />
 
       <div className="ui-layer">
-        <section className="relative min-h-screen flex items-center justify-center px-6">
+        <section className="relative min-h-[100dvh] flex items-center justify-center px-4 md:px-6">
         <div className="max-w-5xl mx-auto text-center space-y-12">
           <motion.div
             initial={{ opacity: 0 }}
@@ -109,7 +109,7 @@ export default function Home() {
           </motion.div>
 
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[0.85] text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[0.85] text-white">
               <DecryptedText text="SUBHAJIT" as="div" />
               <div className="text-outline">
                 <DecryptedText text="CHATTERJEE" as="div" />
@@ -166,7 +166,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      <section id="about" className="min-h-screen py-24 px-6 relative flex items-center">
+      <section id="about" className="min-h-[100dvh] py-16 md:py-24 px-4 md:px-6 relative flex items-center">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -175,7 +175,7 @@ export default function Home() {
           >
             <motion.h2 
               style={{ y: useTransform(smoothScroll, [0, 0.2], [0, -100]) }}
-              className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-none"
             >
               THE_INTELLIGENT_<br />
               <span className="text-indigo-500/50 italic">APPROACH</span>
@@ -189,7 +189,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="experience" className="min-h-[70vh] py-24 px-6 bg-zinc-950/20 flex items-center">
+      <section id="experience" className="min-h-[70dvh] py-16 md:py-24 px-4 md:px-6 bg-zinc-950/20 flex items-center">
         <div className="max-w-4xl mx-auto w-full">
           <div className="space-y-16">
             <motion.h2 
@@ -210,7 +210,7 @@ export default function Home() {
                 <div className="absolute -left-[3.4rem] top-0 w-3 h-3 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] group-hover:scale-150 transition-transform" />
                 
                 <div className="flex flex-col md:flex-row md:items-baseline gap-2 mb-6">
-                  <h3 className="text-4xl md:text-5xl font-black text-white tracking-tighter">Frontend Developer Intern</h3>
+                  <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter">Frontend Developer Intern</h3>
                   <span className="text-indigo-500/50 font-mono text-sm ml-auto md:ml-0 md:pl-4">2025 // PRESENT</span>
                 </div>
 
@@ -241,7 +241,7 @@ export default function Home() {
 
       <ProjectsStrip />
 
-      <section id="skills" className="py-32 px-6 relative z-10 border-t border-white/5">
+      <section id="skills" className="py-16 md:py-32 px-4 md:px-6 relative z-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -249,12 +249,12 @@ export default function Home() {
             viewport={{ once: true }}
             className="mb-20"
           >
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4">
-              <DecryptedText text="CAPABILITIES" />_<span className="text-zinc-500 text-2xl font-mono tracking-normal ml-4">[ SYSTEM_AUDIT ]</span>
+            <h2 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-4">
+              <DecryptedText text="CAPABILITIES" />_<span className="text-zinc-500 text-xl md:text-2xl font-mono tracking-normal ml-2 md:ml-4 flex flex-col md:inline">[ SYSTEM_AUDIT ]</span>
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-0 border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
             {skills.map((skill, idx) => (
               <motion.div
                 key={skill.category}
@@ -288,8 +288,8 @@ export default function Home() {
 
       <Achievements />
       
-      <section id="contact" className="py-24 px-6 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto text-center space-y-24">
+      <section id="contact" className="py-16 md:py-24 px-4 md:px-6 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center space-y-16 md:space-y-24">
           <div className="space-y-6">
             <motion.h2 
               style={{ x: useTransform(smoothScroll, [0.8, 1], [-200, 200]) }}

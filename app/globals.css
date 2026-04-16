@@ -45,6 +45,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
   margin: 0;
   padding: 0;
   cursor: none;
@@ -242,6 +243,17 @@ h1, h2, h3, h4 {
 /* Mono font utility for terminal-style UI elements */
 .font-terminal {
   font-family: var(--font-mono), monospace;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 /* ========================================================================

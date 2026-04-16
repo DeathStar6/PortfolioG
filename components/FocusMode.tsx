@@ -64,34 +64,34 @@ export default function FocusMode() {
       <div className="flashlight-beam" />
       <button 
         onClick={() => setFocusMode(!focusMode)} 
-        className={`focus-mode-btn group flex items-center relative overflow-visible !left-24 !bottom-24 transition-all duration-700 ${!focusMode ? 'ring-2 ring-indigo-500/30 ring-offset-4 ring-offset-transparent shadow-[0_0_30px_rgba(99,102,241,0.2)]' : ''}`}
+        className={`focus-mode-btn group flex items-center relative overflow-visible !left-1/2 !-translate-x-1/2 !bottom-10 md:!left-24 md:!translate-x-0 md:!bottom-24 transition-all duration-700 ${!focusMode ? 'ring-2 ring-indigo-500/30 ring-offset-4 ring-offset-transparent shadow-[0_0_30px_rgba(99,102,241,0.2)]' : ''}`}
       >
         {/* Top Arrows */}
-        <div className={`absolute top-[-3.5rem] left-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ${focusMode ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'}`}>
-          <ChevronDown size={24} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite]" />
-          <ChevronDown size={24} className="text-indigo-400/60 animate-[pulse_1.5s_ease-in-out_infinite_200ms] -mt-3" />
-          <ChevronDown size={24} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms] -mt-3" />
+        <div className={`absolute top-[-2.5rem] md:top-[-3.5rem] left-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ${focusMode ? 'opacity-0 -translate-y-4' : 'opacity-100 translate-y-0'}`}>
+          <ChevronDown size={20} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite] md:w-6 md:h-6" />
+          <ChevronDown size={20} className="text-indigo-400/60 animate-[pulse_1.5s_ease-in-out_infinite_200ms] -mt-3 md:w-6 md:h-6" />
+          <ChevronDown size={20} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms] -mt-3 md:w-6 md:h-6" />
         </div>
 
         {/* Bottom Arrows */}
-        <div className={`absolute bottom-[-3.5rem] left-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ${focusMode ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-          <ChevronUp size={24} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms]" />
-          <ChevronUp size={24} className="text-indigo-400/60 animate-[pulse_1.5s_ease-in-out_infinite_200ms] -mt-3" />
-          <ChevronUp size={24} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite] -mt-3" />
+        <div className={`absolute bottom-[-2.5rem] md:bottom-[-3.5rem] left-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ${focusMode ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+          <ChevronUp size={20} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms] md:w-6 md:h-6" />
+          <ChevronUp size={20} className="text-indigo-400/60 animate-[pulse_1.5s_ease-in-out_infinite_200ms] -mt-3 md:w-6 md:h-6" />
+          <ChevronUp size={20} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite] -mt-3 md:w-6 md:h-6" />
         </div>
 
         {/* Left Arrows */}
-        <div className={`absolute left-[-4.5rem] top-1/2 -translate-y-1/2 flex items-center transition-all duration-500 ${focusMode ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'}`}>
-          <ChevronRight size={24} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite]" />
-          <ChevronRight size={24} className="text-indigo-400/60 -ml-4 animate-[pulse_1.5s_ease-in-out_infinite_200ms]" />
-          <ChevronRight size={24} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms] -ml-4" />
+        <div className={`absolute left-[-2.5rem] md:left-[-4.5rem] top-1/2 -translate-y-1/2 flex items-center transition-all duration-500 ${focusMode ? 'opacity-0 -translate-x-4' : 'opacity-100 translate-x-0'}`}>
+          <ChevronRight size={20} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite] md:w-6 md:h-6" />
+          <ChevronRight size={20} className="text-indigo-400/60 -ml-4 animate-[pulse_1.5s_ease-in-out_infinite_200ms] md:w-6 md:h-6" />
+          <ChevronRight size={20} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms] -ml-4 md:w-6 md:h-6" />
         </div>
         
         {/* Right Arrows */}
-        <div className={`absolute right-[-4.5rem] top-1/2 -translate-y-1/2 flex items-center transition-all duration-500 ${focusMode ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'}`}>
-          <ChevronLeft size={24} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms] -mr-4" />
-          <ChevronLeft size={24} className="text-indigo-400/60 animate-[pulse_1.5s_ease-in-out_infinite_200ms] -mr-4" />
-          <ChevronLeft size={24} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite] -mr-4" />
+        <div className={`absolute right-[-2.5rem] md:right-[-4.5rem] top-1/2 -translate-y-1/2 flex items-center transition-all duration-500 ${focusMode ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'}`}>
+          <ChevronLeft size={20} className="text-indigo-400 animate-[pulse_1.5s_ease-in-out_infinite_400ms] md:w-6 md:h-6" />
+          <ChevronLeft size={20} className="text-indigo-400/60 animate-[pulse_1.5s_ease-in-out_infinite_200ms] -ml-4 md:w-6 md:h-6" />
+          <ChevronLeft size={20} className="text-indigo-400/30 animate-[pulse_1.5s_ease-in-out_infinite] -ml-4 md:w-6 md:h-6" />
         </div>
 
         <Disc size={16} className={`transition-all duration-700 z-10 ${focusMode ? "animate-[spin_4s_linear_infinite] text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.8)]" : "text-zinc-600 group-hover:text-zinc-400"}`} />
