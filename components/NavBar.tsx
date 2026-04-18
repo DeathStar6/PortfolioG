@@ -47,11 +47,11 @@ export default function NavBar() {
       transition={{ delay: 1, duration: 1 }}
       className="fixed top-0 left-0 right-0 z-50 flex justify-center p-6 md:p-8 pointer-events-none"
     >
-      <nav ref={navRef} className="tactile-panel px-6 md:px-10 py-3 md:py-4 rounded-full flex items-center gap-8 md:gap-12 pointer-events-auto border-t border-white/10 shadow-2xl">
+      <nav ref={navRef} className="tactile-panel px-4 md:px-10 py-3 md:py-4 rounded-full flex items-center gap-3 md:gap-12 pointer-events-auto border-t border-white/10 shadow-2xl">
         {/* Physical Detail: Brushed Metal Texture */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none rounded-full" />
         
-        <div className="flex items-center gap-6 md:gap-10 relative z-10 overflow-x-auto no-scrollbar [mask-image:linear-gradient(to_right,black_85%,transparent_100%)] pr-8 pb-1 -mb-1">
+        <div className="flex items-center gap-4 md:gap-10 relative z-10 overflow-x-auto no-scrollbar [mask-image:linear-gradient(to_right,black_85%,transparent_100%)] pr-8 pb-1 -mb-1">
           {navItems.map((item) => (
             <a 
               key={item} 
@@ -69,7 +69,7 @@ export default function NavBar() {
         
         <div className="hidden xs:block w-[1px] h-4 bg-white/5 relative z-10" />
         
-        <div className="flex items-center gap-4 md:gap-6 relative z-10">
+        <div className="flex items-center gap-2 md:gap-6 relative z-10">
           <a href="https://github.com/DeathStar6" target="_blank" className="nav-link group p-3 md:p-1 text-zinc-400 hover:text-white active:scale-90 transition-all touch-manipulation">
             <Github size={16} />
           </a>

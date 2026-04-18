@@ -18,40 +18,7 @@ export default function RobotModel() {
     return () => observer.disconnect()
   }, [])
 
-  // Make the robot look around on mobile by simulating mouse moves on scroll
-  useEffect(() => {
-    // Check if it's a touch device (no actual mouse to look at)
-    const isTouchDevice = typeof window !== 'undefined' && 
-      (window.matchMedia('(hover: none) and (pointer: coarse)').matches || 'ontouchstart' in window)
 
-    if (!isTouchDevice) return
-
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const maxScroll = document.body.scrollHeight - window.innerHeight
-      // Prevent division by zero if page is small
-      if (maxScroll <= 0) return
-
-      const scrollPercent = Math.max(0, Math.min(1, scrollY / maxScroll))
-      
-      // Simulate mouse moving from top to bottom as user scrolls down
-      // X maps to a slight sine wave to give it organic side-to-side head movement
-      const simulatedY = window.innerHeight * scrollPercent
-      const simulatedX = window.innerWidth * (0.5 + Math.sin(scrollPercent * Math.PI) * 0.3)
-
-      const ev = new MouseEvent('mousemove', {
-        clientX: simulatedX,
-        clientY: simulatedY,
-        bubbles: true,
-      })
-      window.dispatchEvent(ev)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    // Fire once to initialize
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   const onSplineLoad = () => {
     setIsLoaded(true)
