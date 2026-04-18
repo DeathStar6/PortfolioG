@@ -35,14 +35,7 @@ export default function RobotModel() {
     >
       <div 
         className="w-full h-full relative" 
-        style={{ 
-          mixBlendMode: 'screen',
-          /* Smoothly fade the hard edges of the Spline background into the site background */
-          WebkitMaskImage: 'radial-gradient(ellipse 75% 75% at 50% 50%, black 50%, transparent 100%)',
-          maskImage: 'radial-gradient(ellipse 75% 75% at 50% 50%, black 50%, transparent 100%)',
-          /* Surgically precise cut just for the Spline logo (170px wide, 55px tall) */
-          clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 55px), calc(100% - 170px) calc(100% - 55px), calc(100% - 170px) 100%, 0 100%)' 
-        }}
+        style={{ mixBlendMode: 'screen' }}
       >
         {isVisible && (
           <Spline 

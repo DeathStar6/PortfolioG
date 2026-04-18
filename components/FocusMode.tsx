@@ -42,20 +42,33 @@ export default function FocusMode() {
       }
     }
 
+    let scrollTick = false;
     const handleScroll = () => {
-      document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`)
+      if (document.body.classList.contains('focus-mode-active')) {
+        if (!scrollTick) {
+          window.requestAnimationFrame(() => {
+            document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`)
+            scrollTick = false
+          })
+          scrollTick = true
+        }
+      }
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    
-    // Initial calculates to pre-position beam and scroll
-    updateBeamAngle(window.innerWidth / 2, window.innerHeight / 2)
-    handleScroll()
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener('scroll', handleScroll, { passive: true })
+      
+      // Initial calculates to pre-position beam and scroll
+      updateBeamAngle(window.innerWidth / 2, window.innerHeight / 2)
+      handleScroll()
+    }
     
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('scroll', handleScroll)
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('scroll', handleScroll)
+      }
     }
   }, [])
 
