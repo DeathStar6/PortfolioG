@@ -38,14 +38,22 @@ export default function RobotModel() {
         style={{ mixBlendMode: 'screen' }}
       >
         {isVisible && (
-          <Spline 
-            onLoad={onSplineLoad}
-            scene="https://prod.spline.design/ytNb29B-70AARpHr/scene.splinecode" 
-          />
+          <>
+            <style dangerouslySetInnerHTML={{__html: `
+              .spline-watermark-hider a {
+                display: none !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+              }
+            `}} />
+            <div className="w-full h-full spline-watermark-hider">
+              <Spline 
+                onLoad={onSplineLoad}
+                scene="https://prod.spline.design/ytNb29B-70AARpHr/scene.splinecode" 
+              />
+            </div>
+          </>
         )}
-        {/* Performance-friendly logo hider: covers the Spline watermark with black. 
-            Because the parent has mixBlendMode: 'screen', this black block becomes entirely transparent. */}
-        <div className="absolute bottom-0 right-0 w-[180px] h-[60px] bg-black pointer-events-none" />
       </div>
       
       {!isLoaded && (
